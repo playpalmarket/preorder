@@ -3,40 +3,41 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Pre Order - Privacy Update</title>
+  <title>Pre Order - Elegan</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --bg-color: #f5f5f7;
+      --bg-color: #f9f9fa;
       --card-bg-color: #ffffff;
       --primary-text-color: #1d1d1f;
-      --secondary-text-color: #515154;
-      --border-color: #d2d2d7;
-      --accent-color: #5C80BC; 
+      --secondary-text-color: #6e6e73;
+      --border-color: #e0e0e5;
+      --accent-color: #0071e3;
       --header-text-color: #ffffff;
-      --shadow-color: rgba(0, 0, 0, 0.08);
+      --shadow-color: rgba(0, 0, 0, 0.06);
       --shadow-hover-color: rgba(0, 0, 0, 0.12);
-      --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
-      --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+      --font-family: 'Inter', sans-serif;
+      --ease: cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    *, *::before, *::after { box-sizing: border-box; }
-
-    html {
-      scroll-behavior: smooth;
+    *, *::before, *::after {
+      box-sizing: border-box;
     }
-    
+
     body {
-      font-family: var(--font-family);
       margin: 0;
+      font-family: var(--font-family);
       background-color: var(--bg-color);
       color: var(--primary-text-color);
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
+      line-height: 1.6;
+      letter-spacing: 0.2px;
     }
 
     .container {
       max-width: 720px;
-      margin: 0 auto;
+      margin: auto;
       padding: 0 1rem;
     }
 
@@ -44,17 +45,27 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 1rem 1rem;
+      padding: 1rem;
       background-color: var(--accent-color);
       color: var(--header-text-color);
-      position: sticky; 
+      position: sticky;
       top: 0;
       z-index: 1000;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .logo-title {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .logo-title img {
+      height: 24px;
     }
 
     .header-title {
-      font-size: 1.25rem;
+      font-size: 1.2rem;
       font-weight: 600;
       margin: 0;
     }
@@ -63,72 +74,59 @@
       background: none;
       border: none;
       cursor: pointer;
-      padding: 0.5rem;
-      width: 44px;
-      height: 44px;
       display: flex;
       flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      gap: 5px;
-      z-index: 1001;
+      gap: 4px;
     }
 
-    .menu-toggle .bar {
-      display: block;
-      width: 22px;
+    .menu-toggle span {
+      width: 20px;
       height: 2px;
-      background-color: var(--header-text-color); 
+      background: white;
       border-radius: 1px;
-      transition: transform 0.4s var(--ease-out-expo), opacity 0.4s var(--ease-out-expo);
+      transition: all 0.3s var(--ease);
     }
-    
-    .nav-open .bar1 { transform: translateY(7px) rotate(45deg); }
+
+    .nav-open .bar1 { transform: translateY(6px) rotate(45deg); }
     .nav-open .bar2 { opacity: 0; }
-    .nav-open .bar3 { transform: translateY(-7px) rotate(-45deg); }
+    .nav-open .bar3 { transform: translateY(-6px) rotate(-45deg); }
 
     .main-nav {
       display: none;
       flex-direction: column;
-      background: var(--card-bg-color);
-      position: absolute;
-      top: 100%;
-      left: 0;
+      background-color: var(--card-bg-color);
       width: 100%;
-      box-shadow: 0 8px 24px var(--shadow-color);
-      border-bottom-left-radius: 12px;
-      border-bottom-right-radius: 12px;
-      overflow: hidden;
+      box-shadow: 0 8px 16px var(--shadow-color);
     }
 
-    .main-nav.show { display: flex; }
+    .main-nav.show {
+      display: flex;
+    }
 
     .main-nav a {
-      padding: 1.2rem 1.5rem;
+      padding: 1rem 1.5rem;
       text-decoration: none;
       color: var(--primary-text-color);
       font-weight: 500;
-      transition: background-color 0.3s ease, color 0.3s ease;
       border-bottom: 1px solid var(--bg-color);
-      text-align: left;
+      transition: background 0.3s, color 0.3s;
     }
-
-    .main-nav a:last-child { border-bottom: none; }
 
     .main-nav a:hover {
       background-color: var(--accent-color);
       color: var(--header-text-color);
     }
-    
-    .search-container { padding: 1.5rem 0; }
-    
+
+    .search-container {
+      padding: 1.5rem 0;
+    }
+
     .search-input {
       width: 100%;
-      padding: 0.9rem 1.2rem;
+      padding: 0.85rem 1.2rem;
       border: 1px solid var(--border-color);
       border-radius: 10px;
       font-size: 1rem;
-      font-family: var(--font-family);
       background-color: var(--card-bg-color);
       transition: border-color 0.3s ease, box-shadow 0.3s ease;
     }
@@ -136,126 +134,133 @@
     .search-input:focus {
       outline: none;
       border-color: var(--accent-color);
-      box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-color) 30%, transparent);
+      box-shadow: 0 0 0 3px rgba(0,113,227,0.2);
     }
-    
-    #list-container { padding-bottom: 2rem; }
-    
-    @keyframes fadeInDown {
-      from {
-        opacity: 0;
-        transform: translateY(-20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+
+    #list-container {
+      padding-bottom: 2rem;
     }
 
     .card {
-      background-color: var(--card-bg-color);
-      margin-bottom: 1rem;
+      background: var(--card-bg-color);
       border-radius: 12px;
       box-shadow: 0 4px 12px var(--shadow-color);
+      margin-bottom: 1rem;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
       overflow: hidden;
-      transition: transform 0.4s var(--ease-out-expo), box-shadow 0.4s var(--ease-out-expo);
-      animation: fadeInDown 0.6s var(--ease-out-expo) backwards;
     }
 
     .card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 8px 20px var(--shadow-hover-color);
+      transform: translateY(-4px);
+      box-shadow: 0 8px 16px var(--shadow-hover-color);
     }
 
     .card-header {
-      cursor: pointer;
       display: flex;
       justify-content: space-between;
       align-items: center;
       padding: 1rem 1.2rem;
+      cursor: pointer;
     }
-    
+
     .card-title-container {
       display: flex;
-      align-items: center;
       gap: 0.75rem;
-      overflow: hidden;
+      align-items: center;
     }
 
     .card-id-badge {
-      background-color: var(--accent-color);
-      color: var(--header-text-color);
+      background: var(--accent-color);
+      color: white;
       padding: 0.25rem 0.6rem;
       border-radius: 1rem;
-      font-size: 0.8rem;
+      font-size: 0.75rem;
       font-weight: 600;
     }
-    
+
     .card-title-text {
       font-weight: 600;
-      white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+      white-space: nowrap;
     }
-    
-    .card-header .arrow {
+
+    .arrow {
       width: 16px;
       height: 16px;
       fill: var(--secondary-text-color);
-      transition: transform 0.5s var(--ease-out-expo);
-      flex-shrink: 0;
+      transition: transform 0.3s ease;
     }
 
-    .card.open .arrow { transform: rotate(180deg); }
-    
+    .card.open .arrow {
+      transform: rotate(180deg);
+    }
+
     .card-details {
       max-height: 0;
       overflow: hidden;
-      transition: max-height 0.6s var(--ease-out-expo), padding 0.6s var(--ease-out-expo);
+      transition: max-height 0.5s ease, padding 0.5s ease;
       border-top: 1px solid var(--bg-color);
     }
-    
+
     .card.open .card-details {
-      max-height: 1000px; 
-      padding: 1.2rem 1.5rem;
+      max-height: 1000px;
+      padding: 1rem 1.5rem;
     }
 
     .card-details p {
       margin: 0 0 0.75rem 0;
-      font-size: 0.95rem;
-      line-height: 1.5;
       color: var(--secondary-text-color);
-      word-wrap: break-word;
     }
-    
-    .card-details p:last-child { margin-bottom: 0; }
-    
+
     .card-details strong {
       color: var(--primary-text-color);
-      font-weight: 500;
+    }
+
+    @media (min-width: 768px) {
+      .main-nav {
+        display: flex !important;
+        flex-direction: row;
+        position: static;
+        background: none;
+        box-shadow: none;
+      }
+
+      .main-nav a {
+        border: none;
+        color: white;
+        padding: 0 1rem;
+      }
+
+      .menu-toggle {
+        display: none;
+      }
     }
   </style>
 </head>
 <body>
 
 <header>
-  <h2 class="header-title">Pre Order</h2>
+  <div class="logo-title">
+    <img src="logo.svg" alt="Logo" />
+    <h2 class="header-title">Pre Order</h2>
+  </div>
   <button class="menu-toggle" id="menuToggle">
-      <span class="bar bar1"></span>
-      <span class="bar bar2"></span>
-      <span class="bar bar3"></span>
+    <span class="bar bar1"></span>
+    <span class="bar bar2"></span>
+    <span class="bar bar3"></span>
   </button>
   <nav class="main-nav" id="mainNav">
     <a href="#" data-sheet="0">Gift Starlight</a>
     <a href="#" data-sheet="1">PO Event Misi</a>
-    <a href="#" data-sheet="2">Pre Order Skin</a>
-    <a href="#" data-sheet="3">Pre Order Joki</a>
+    <a href="#" data-sheet="2">Skin</a>
+    <a href="#" data-sheet="3">Joki</a>
   </nav>
 </header>
 
 <main class="container">
   <div class="search-container">
-    <input type="text" id="search" class="search-input" placeholder="Cari berdasarkan Nomor Telepon...">
+    <input type="text" id="search" class="search-input" placeholder="Cari berdasarkan Nomor Telepon..." />
   </div>
   <div id="list-container"></div>
 </main>
@@ -309,7 +314,7 @@ document.addEventListener('DOMContentLoaded', () => {
       renderList();
     } catch (error) {
       console.error("Failed to load sheet data:", error);
-      listContainer.innerHTML = '<p style="text-align:center; color: #d93025;">Gagal memuat data. Pastikan Google Sheet bisa diakses publik.</p>';
+      listContainer.innerHTML = '<p style="text-align:center; color: #d93025;">⚠️ Gagal memuat data.</p>';
     }
   }
 
@@ -333,7 +338,6 @@ document.addEventListener('DOMContentLoaded', () => {
       
       const card = document.createElement("div");
       card.className = "card";
-      card.style.animationDelay = `${index * 60}ms`;
 
       const cardHeader = document.createElement("div");
       cardHeader.className = "card-header";
@@ -347,31 +351,24 @@ document.addEventListener('DOMContentLoaded', () => {
       
       const cardDetails = document.createElement("div");
       cardDetails.className = "card-details";
-      
+
       let detailsHTML = '';
       Object.entries(row).forEach(([key, value]) => {
-        // PERBAIKAN: Sembunyikan Nomor, Nomor Telepon, dan No Telepon dari tampilan
-        const lowerCaseKey = key.toLowerCase();
-        if (key && value && lowerCaseKey !== 'nomor' && lowerCaseKey !== 'nomor telepon' && lowerCaseKey !== 'no telepon') { 
+        const lower = key.toLowerCase();
+        if (value && !['nomor', 'nomor telepon', 'no telepon'].includes(lower)) {
           detailsHTML += `<p><strong>${key}</strong>: ${value}</p>`;
         }
       });
-      cardDetails.innerHTML = detailsHTML;
 
+      cardDetails.innerHTML = detailsHTML;
       card.appendChild(cardHeader);
       card.appendChild(cardDetails);
       listContainer.appendChild(card);
-      
+
       cardHeader.addEventListener('click', () => {
-        const isAlreadyOpen = card.classList.contains('open');
-
-        document.querySelectorAll('#list-container .card').forEach(c => {
-          c.classList.remove('open');
-        });
-
-        if (!isAlreadyOpen) {
-          card.classList.add('open');
-        }
+        const isOpen = card.classList.contains('open');
+        document.querySelectorAll('.card').forEach(c => c.classList.remove('open'));
+        if (!isOpen) card.classList.add('open');
       });
     });
   }
