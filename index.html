@@ -7,7 +7,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
   <style>
     :root {
-      --color-bg: #f8f8f8;
+      --color-bg: #f9f9fa;
       --color-surface: #ffffff;
       --color-primary: #0071e3;
       --color-text: #1d1d1f;
@@ -25,7 +25,6 @@
       font-family: var(--font-family);
       background-color: var(--color-bg);
       color: var(--color-text);
-      line-height: 1.6;
     }
 
     header {
@@ -37,7 +36,7 @@
       align-items: center;
       position: sticky;
       top: 0;
-      z-index: 999;
+      z-index: 1000;
     }
 
     .logo {
@@ -50,7 +49,6 @@
       text-decoration: none;
       color: var(--color-muted);
       font-weight: 500;
-      transition: color 0.3s ease;
     }
 
     nav a:hover {
@@ -74,13 +72,13 @@
     }
 
     .container {
-      max-width: 700px;
+      max-width: 720px;
       margin: auto;
       padding: 1rem;
     }
 
     .search-bar {
-      margin: 2rem 0 1.5rem;
+      margin: 2rem 0;
     }
 
     .search-input {
@@ -147,18 +145,15 @@
 </header>
 
 <section class="hero">
-  <h1>Pre Order Center</h1>
-  <p>Cek status pemesanan kamu dengan mudah dan cepat</p>
+  <h1>Status Pre Order</h1>
+  <p>Cari data pesanan kamu di bawah ini</p>
 </section>
 
 <main class="container">
   <div class="search-bar">
-    <input type="text" class="search-input" placeholder="Cari berdasarkan Nomor Telepon..." id="search" />
+    <input type="text" id="search" class="search-input" placeholder="Masukkan nomor telepon atau nickname..." />
   </div>
-
-  <div id="list-container">
-    <!-- Card akan diisi otomatis oleh JavaScript -->
-  </div>
+  <div id="list-container"></div>
 </main>
 
 <footer>
@@ -166,33 +161,35 @@
 </footer>
 
 <script>
-  const listContainer = document.getElementById("list-container");
   const searchInput = document.getElementById("search");
+  const listContainer = document.getElementById("list-container");
   let data = [];
 
-  async function loadData() {
-    const url = "https://docs.google.com/spreadsheets/d/1B0XPR4uSvRzy9LfzWDjNjwAyMZVtJs6_Kk_r2fh7dTw/gviz/tq?tqx=out:csv&sheet=Sheet1";
-    const res = await fetch(url);
-    const text = await res.text();
-    const rows = text.trim().split("\n").map(r =>
-      r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(c => c.replace(/^"|"$/g, "").trim())
-    );
-    const headers = rows.shift();
-    data = rows.map(r => Object.fromEntries(r.map((c, i) => [headers[i], c])));
-    renderList();
+  const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/1B0XPR4uSvRzy9LfzWDjNjwAyMZVtJs6_Kk_r2fh7dTw/gviz/tq?tqx=out:csv&sheet=Sheet1";
+
+  async function fetchCSV() {
+    try {
+      const res = await fetch(SHEET_CSV_URL);
+      const text = await res.text();
+      const rows = text.trim().split("\n").map(row => row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(cell => cell.replace(/^"|"$/g, "")));
+      const headers = rows.shift();
+      return rows.map(row => Object.fromEntries(row.map((val, i) => [headers[i].trim(), val.trim()])));
+    } catch (err) {
+      listContainer.innerHTML = "<p style='text-align:center; color: red;'>Gagal mengambil data.</p>";
+      return [];
+    }
   }
 
   function renderList() {
     const query = searchInput.value.toLowerCase();
-    listContainer.innerHTML = "";
-
     const filtered = data.filter(row => {
-      const telp = row["Nomor Telepon"] || row["No Telepon"];
-      return telp?.toLowerCase().includes(query);
+      return Object.values(row).some(val => val.toLowerCase().includes(query));
     });
 
+    listContainer.innerHTML = "";
+
     if (filtered.length === 0) {
-      listContainer.innerHTML = "<p style='text-align:center; color: #999;'>Tidak ditemukan.</p>";
+      listContainer.innerHTML = "<p style='text-align:center; color: #999;'>Data tidak ditemukan.</p>";
       return;
     }
 
@@ -200,26 +197,30 @@
       const card = document.createElement("div");
       card.className = "card";
 
-      const title = row["Nickname"] || row["Nama Pemesan"] || "Tanpa Nama";
-      const nomor = row["Nomor"] || row["ID"];
+      const title = row["Nickname"] || row["Nama"] || row["Nama Pemesan"] || "Tanpa Nama";
+      const nomor = row["Nomor"] || row["ID"] || row["Nomor Telepon"] || row["No Telepon"] || "";
 
-      let html = `<div class="card-title">${title} (${nomor})</div>`;
-      html += `<div class="card-details">`;
-      for (const [key, value] of Object.entries(row)) {
-        const lowerKey = key.toLowerCase();
-        if (["nomor", "no telepon", "nomor telepon"].includes(lowerKey)) continue;
-        html += `<p><strong>${key}:</strong> ${value}</p>`;
+      let html = `<div class="card-title">${title} (${nomor})</div><div class="card-details">`;
+
+      for (const [key, val] of Object.entries(row)) {
+        if (["Nickname", "Nama", "Nama Pemesan", "Nomor", "ID", "Nomor Telepon", "No Telepon"].includes(key)) continue;
+        html += `<p><strong>${key}:</strong> ${val}</p>`;
       }
+
       html += `</div>`;
       card.innerHTML = html;
-
       listContainer.appendChild(card);
     });
   }
 
   searchInput.addEventListener("input", renderList);
-  loadData();
+
+  fetchCSV().then(res => {
+    data = res;
+    renderList(); // render semua saat awal
+  });
 </script>
 
 </body>
 </html>
+ 
