@@ -2,219 +2,736 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Daftar Antrian Modern</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Antrian Modern - Pre Order</title>
   <style>
-    /* Fikirkan ide baru untuk kemajuan tampilannya */
     :root {
-      --bg: #f0f2f5;
-      --card-bg: #ffffff;
-      --text-primary: #1f2937;
-      --text-secondary: #4b5563;
-      --border: #e5e7eb;
-      --accent-success: #10b981;
-      --accent-pending: #f59e0b;
-      --accent-failed:  #ef4444;
-      --accent-cancel:  #6b7280;
-      --scrollbar-bg: #d1d5db;
-      --scrollbar-thumb: #9ca3af;
-      --transition: 0.3s ease;
-      --radius: 8px;
-      --font: -apple-system, BlinkMacSystemFont, “Segoe UI”, Roboto, “Inter”, sans-serif;
+      --bg-light: #f8fafc;
+      --bg-dark: #1f2937;
+      --card-bg-light: #ffffff;
+      --card-bg-dark: #374151;
+      --text-primary-light: #1f2937;
+      --text-primary-dark: #f3f4f6;
+      --text-secondary-light: #6b7280;
+      --text-secondary-dark: #9ca3af;
+      --accent-blue: #3b82f6;
+      --accent-blue-hover: #2563eb;
+      --success: #22c55e;
+      --pending: #eab308;
+      --failed: #ef4444;
+      --canceled: #6b7280;
+      --border-light: #e5e7eb;
+      --border-dark: #4b5563;
+      --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.1);
+      --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --border-radius: 8px;
+      --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
     }
-    @media (prefers-color-scheme: dark) {
-      :root {
-        --bg: #181a1f;
-        --card-bg: #1f2228;
-        --text-primary: #e5e7eb;
-        --text-secondary: #9ca3af;
-        --border: #2f3136;
-        --scrollbar-bg: #3a3c42;
-        --scrollbar-thumb: #4b5563;
-      }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
     }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
     body {
-      font-family: var(--font);
-      background: var(--bg);
-      color: var(--text-primary);
+      font-family: var(--font-family);
+      margin: 0;
+      background: var(--bg-light);
+      color: var(--text-primary-light);
       min-height: 100vh;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    body.dark {
+      background: var(--bg-dark);
+      color: var(--text-primary-dark);
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 1rem;
+    }
+
+    /* Header */
+    header {
+      background: var(--card-bg-light);
+      box-shadow: var(--shadow-sm);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      padding: 1rem;
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    body.dark header {
+      background: var(--card-bg-dark);
+      border-bottom: 1px solid var(--border-dark);
+    }
+
+    .header-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .header-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin: 0;
+    }
+
+    .theme-toggle {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0.5rem;
+      display: flex;
+      align-items: center;
+    }
+
+    .theme-toggle svg {
+      width: 24px;
+      height: 24px;
+      fill: var(--text-secondary-light);
+    }
+
+    body.dark .theme-toggle svg {
+      fill: var(--text-secondary-dark);
+    }
+
+    /* Search and Filters */
+    .search-filter-container {
+      position: sticky;
+      top: 72px;
+      background: var(--card-bg-light);
+      padding: 1rem;
+      z-index: 900;
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    body.dark .search-filter-container {
+      background: var(--card-bg-dark);
+      border-bottom: 1px solid var(--border-dark);
+    }
+
+    .search-filter-wrapper {
+      display: flex;
+      gap: 1rem;
+      max-width: 1200px;
+      margin: 0 auto;
+      flex-wrap: wrap;
+    }
+
+    .search-wrapper {
+      position: relative;
+      flex: 1;
+      min-width: 200px;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 0.75rem 1rem 0.75rem 2.5rem;
+      border: 1px solid var(--border-light);
+      border-radius: var(--border-radius);
+      font-size: 0.875rem;
+      background: var(--card-bg-light);
+      transition: all 0.2s var(--ease-in-out);
+    }
+
+    body.dark .search-input {
+      background: var(--card-bg-dark);
+      border-color: var(--border-dark);
+      color: var(--text-primary-dark);
+    }
+
+    .search-input:focus {
+      outline: none;
+      border-color: var(--accent-blue);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 0.75rem;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 20px;
+      height: 20px;
+      fill: var(--text-secondary-light);
+    }
+
+    body.dark .search-icon {
+      fill: var(--text-secondary-dark);
+    }
+
+    .filter-select {
+      padding: 0.75rem;
+      border: 1px solid var(--border-light);
+      border-radius: var(--border-radius);
+      font-size: 0.875rem;
+      background: var(--card-bg-light);
+      cursor: pointer;
+    }
+
+    body.dark .filter-select {
+      background: var(--card-bg-dark);
+      border-color: var(--border-dark);
+      color: var(--text-primary-dark);
+    }
+
+    /* Queue List */
+    .queue-list {
+      padding: 1rem 0;
+      min-height: 400px;
+    }
+
+    .card {
+      background: var(--card-bg-light);
+      margin-bottom: 0.5rem;
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow-sm);
+      overflow: hidden;
+      transition: all 0.3s var(--ease-in-out);
+      max-height: 60px;
+      display: flex;
+      align-items: center;
       position: relative;
     }
-    header {
-      position: sticky; top: 0; z-index: 1000;
-      background: var(--card-bg); border-bottom: 1px solid var(--border);
-      padding: 1rem; display: flex; align-items: center; gap: 1rem;
+
+    body.dark .card {
+      background: var(--card-bg-dark);
     }
-    .search {
-      flex: 1; position: relative;
+
+    .card.open {
+      max-height: 500px;
     }
-    .search input {
-      width: 100%; padding: 0.75rem 1rem 0.75rem 2.5rem;
-      border: 1px solid var(--border); border-radius: var(--radius);
-      transition: border var(--transition);
-      background: var(--card-bg);
-      color: var(--text-primary);
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      padding: 0.75rem 1rem;
+      cursor: pointer;
+      width: 100%;
+      gap: 1rem;
     }
-    .search input:focus { border-color: var(--accent-pending); outline: none; }
-    .search svg {
-      position: absolute; left: 0.75rem; top: 50%;
-      width: 1rem; height: 1rem; transform: translateY(-50%);
-      fill: var(--text-secondary);
+
+    .card-id {
+      font-weight: 600;
+      font-size: 0.875rem;
+      background: var(--accent-blue);
+      color: white;
+      padding: 0.25rem 0.75rem;
+      border-radius: 1rem;
+      flex-shrink: 0;
     }
-    #list { padding: 1rem; max-width: 800px; margin: auto; }
-    .card {
-      background: var(--card-bg); border: 1px solid var(--border);
-      border-radius: var(--radius); margin-bottom: 0.75rem;
-      overflow: hidden; transition: transform var(--transition), box-shadow var(--transition);
+
+    .card-nickname {
+      font-weight: 600;
+      font-size: 0.875rem;
+      flex: 1;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
-    .card:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
-    .summary {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 0.75rem 1rem; cursor: pointer;
+
+    .card-product {
+      font-size: 0.875rem;
+      color: var(--text-secondary-light);
+      flex: 1;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
-    .summary-left { display: flex; align-items: center; gap: 1rem; }
-    .badge {
-      padding: 0.25rem 0.5rem; border-radius: 12px;
-      font-size: 0.75rem; font-weight: 600; color: #fff;
+
+    body.dark .card-product {
+      color: var(--text-secondary-dark);
     }
-    .badge.success { background: var(--accent-success); }
-    .badge.pending { background: var(--accent-pending); }
-    .badge.failed  { background: var(--accent-failed); }
-    .badge.cancel  { background: var(--accent-cancel); }
-    .arrow {
-      width: 1rem; height: 1rem; transition: transform var(--transition);
-      fill: var(--text-secondary);
+
+    .card-status {
+      padding: 0.25rem 0.75rem;
+      border-radius: 1rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      flex-shrink: 0;
+      text-transform: uppercase;
     }
-    .card.open .arrow { transform: rotate(180deg); }
-    .details {
-      max-height: 0; overflow: hidden;
-      transition: max-height var(--transition), padding var(--transition);
+
+    .card-status.success {
+      background: var(--success);
+      color: white;
+    }
+
+    .card-status.pending {
+      background: var(--pending);
+      color: white;
+    }
+
+    .card-status.failed {
+      background: var(--failed);
+      color: white;
+    }
+
+    .card-status.canceled {
+      background: var(--canceled);
+      color: white;
+    }
+
+    .card-arrow {
+      width: 20px;
+      height: 20px;
+      fill: var(--text-secondary-light);
+      transition: transform 0.3s var(--ease-in-out);
+      flex-shrink: 0;
+    }
+
+    body.dark .card-arrow {
+      fill: var(--text-secondary-dark);
+    }
+
+    .card.open .card-arrow {
+      transform: rotate(180deg);
+    }
+
+    .card-details {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s var(--ease-in-out);
       padding: 0 1rem;
-      border-top: 1px solid var(--border);
     }
-    .card.open .details {
-      padding: 0.75rem 1rem; max-height: 500px;
+
+    .card.open .card-details {
+      max-height: 400px;
+      padding: 1rem;
     }
-    .details p {
-      font-size: 0.875rem; color: var(--text-secondary);
-      margin-bottom: 0.5rem; display: flex; gap: 0.5rem;
+
+    .card-details-content {
+      display: grid;
+      grid-template-columns: minmax(100px, 1fr) 2fr;
+      gap: 0.5rem;
+      font-size: 0.875rem;
+      color: var(--text-secondary-light);
     }
-    .details strong { width: 80px; flex-shrink: 0; color: var(--text-primary); }
-    /* Back to top */
-    #topBtn {
-      position: fixed; bottom: 2rem; right: 2rem; display: none;
-      background: var(--accent-pending); border: none; padding: 0.75rem;
-      border-radius: 50%; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-      transition: opacity var(--transition);
+
+    body.dark .card-details-content {
+      color: var(--text-secondary-dark);
     }
-    #topBtn.show { display: block; }
-    #topBtn svg { width: 1rem; height: 1rem; fill: #fff; }
+
+    .card-details-content strong {
+      font-weight: 600;
+      color: var(--text-primary-light);
+    }
+
+    body.dark .card-details-content strong {
+      color: var(--text-primary-dark);
+    }
+
+    /* Pagination */
+    .pagination {
+      display: flex;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 1rem;
+    }
+
+    .pagination button {
+      padding: 0.5rem 1rem;
+      border: 1px solid var(--border-light);
+      background: var(--card-bg-light);
+      border-radius: var(--border-radius);
+      cursor: pointer;
+      font-size: 0.875rem;
+      transition: all 0.2s var(--ease-in-out);
+    }
+
+    body.dark .pagination button {
+      background: var(--card-bg-dark);
+      border-color: var(--border-dark);
+      color: var(--text-primary-dark);
+    }
+
+    .pagination button:hover {
+      background: var(--accent-blue);
+      color: white;
+      border-color: var(--accent-blue);
+    }
+
+    .pagination button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    /* Scroll to Top */
+    .scroll-to-top {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      background: var(--accent-blue);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 48px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s var(--ease-in-out);
+      box-shadow: var(--shadow-md);
+    }
+
+    .scroll-to-top.show {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .scroll-to-top svg {
+      width: 24px;
+      height: 24px;
+      fill: white;
+    }
+
+    /* Responsive Design */
+    @media (min-width: 768px) {
+      .card-header {
+        padding: 0.75rem 1.5rem;
+      }
+
+      .card-details-content {
+        grid-template-columns: minmax(150px, 1fr) 2fr;
+        gap: 1rem;
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .queue-list {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+        gap: 1rem;
+      }
+
+      .card {
+        margin-bottom: 0;
+      }
+    }
+
+    /* Virtual Scroll */
+    .queue-list.virtual {
+      height: 600px;
+      overflow-y: auto;
+      position: relative;
+    }
+
+    .queue-list.virtual .card {
+      position: absolute;
+      width: 100%;
+    }
+
     /* Scrollbar */
-    ::-webkit-scrollbar { width: 8px; }
-    ::-webkit-scrollbar-track { background: var(--scrollbar-bg); }
-    ::-webkit-scrollbar-thumb { background: var(--scrollbar-thumb); border-radius: 4px; }
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--border-light);
+    }
+
+    body.dark ::-webkit-scrollbar-track {
+      background: var(--border-dark);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--accent-blue);
+      border-radius: 3px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--accent-blue-hover);
+    }
   </style>
 </head>
 <body>
+  <header>
+    <div class="header-content">
+      <h2 class="header-title">Antrian Pre Order</h2>
+      <button class="theme-toggle" id="themeToggle">
+        <svg viewBox="0 0 24 24">
+          <path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M12 5a7 7 0 100 14 7 7 0 000-14z" />
+        </svg>
+      </button>
+    </div>
+  </header>
 
-<header>
-  <div class="search">
-    <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27..."/></svg>
-    <input type="text" id="searchInput" placeholder="Cari Nomor, Nama, Produk...">
+  <div class="search-filter-container">
+    <div class="search-filter-wrapper">
+      <div class="search-wrapper">
+        <svg class="search-icon" viewBox="0 0 24 24">
+          <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" />
+        </svg>
+        <input type="text" id="search" class="search-input" placeholder="Cari berdasarkan Nomor Telepon atau Nickname..." />
+      </div>
+      <select class="filter-select" id="statusFilter">
+        <option value="all">Semua Status</option>
+        <option value="success">Success</option>
+        <option value="pending">Pending</option>
+        <option value="failed">Failed</option>
+        <option value="canceled">Batal</option>
+      </select>
+      <select class="filter-select" id="sheetFilter">
+        <option value="0">Gift Starlight</option>
+        <option value="1">PO Event Misi</option>
+        <option value="2">Pre Order Skin</option>
+        <option value="3">Pre Order Joki</option>
+      </select>
+    </div>
   </div>
-</header>
 
-<main id="list"></main>
+  <main class="container">
+    <div class="queue-list" id="listContainer"></div>
+    <div class="pagination" id="pagination"></div>
+    <button class="scroll-to-top" id="scrollToTop">
+      <svg viewBox="0 0 24 24">
+        <path d="M12 5l-8 8h6v6h4v-6h6l-8-8z" />
+      </svg>
+    </button>
+  </main>
 
-<button id="topBtn" title="Kembali ke Atas">
-  <svg viewBox="0 0 24 24"><path d="M4 12l1.41 1.41L11 7.83v12.34h2V7.83l5.59 5.58L20 12l-8-8-8 8z"/></svg>
-</button>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const searchInput = document.getElementById('search');
+      const statusFilter = document.getElementById('statusFilter');
+      const sheetFilter = document.getElementById('sheetFilter');
+      const listContainer = document.getElementById('listContainer');
+      const paginationContainer = document.getElementById('pagination');
+      const scrollToTop = document.getElementById('scrollToTop');
+      const themeToggle = document.getElementById('themeToggle');
 
-<script>
-  let data = [];       // seluruh data antrian
-  let batchSize = 50;  // jumlah per render
-  let offset = 0;
-  let filtered = [];
-  const listEl = document.getElementById('list');
-  const searchEl = document.getElementById('searchInput');
-  const topBtn = document.getElementById('topBtn');
+      let allData = [];
+      let headers = [];
+      let currentSheet = 0;
+      let currentPage = 1;
+      const itemsPerPage = 20;
+      let filteredData = [];
 
-  // simulasi load data
-  async function loadData() {
-    // ganti dengan fetch CSV/JSON asli
-    const res = await fetch('data.json');
-    data = await res.json();
-    filtered = data;
-    renderBatch();
-  }
+      // Theme Toggle
+      themeToggle.addEventListener('click', () => {
+        document.body.classList.toggle('dark');
+        localStorage.setItem('theme', document.body.classList.contains('dark') ? 'dark' : 'light');
+      });
 
-  function renderBatch() {
-    const slice = filtered.slice(offset, offset + batchSize);
-    slice.forEach(item => listEl.appendChild(createCard(item)));
-    offset += batchSize;
-  }
+      if (localStorage.getItem('theme') === 'dark') {
+        document.body.classList.add('dark');
+      }
 
-  function createCard(item) {
-    const card = document.createElement('div');
-    card.className = 'card';
-    // summary
-    const sum = document.createElement('div');
-    sum.className = 'summary';
-    const left = document.createElement('div');
-    left.className = 'summary-left';
-    left.innerHTML = `<strong>#${item.nomor}</strong>
-                      <span>${item.nickname}</span>
-                      <span>${item.produk}</span>`;
-    const badge = document.createElement('span');
-    badge.className = `badge ${item.status.toLowerCase()}`;
-    badge.textContent = item.status;
-    const arrow = document.createElementNS('http://www.w3.org/2000/svg','svg');
-    arrow.setAttribute('viewBox','0 0 24 24');
-    arrow.classList.add('arrow');
-    arrow.innerHTML = '<path d="M7.41 8.59L12 13.17l4.59-4.58..."/>';
-    sum.append(left, badge, arrow);
-    // details
-    const det = document.createElement('div');
-    det.className = 'details';
-    const content = document.createElement('div');
-    content.innerHTML = Object.entries(item).map(([k,v]) =>
-      k!=='nomor'&&k!=='nickname'&&k!=='produk'&&`<p><strong>${k}:</strong>${v}</p>`
-    ).join('');
-    det.append(content);
-    card.append(sum, det);
-    sum.addEventListener('click', () => {
-      const open = card.classList.toggle('open');
-      if (open) det.style.maxHeight = det.scrollHeight + 'px';
-      else det.style.maxHeight = null;
+      // Scroll to Top
+      window.addEventListener('scroll', () => {
+        if (window.scrollY > 300) {
+          scrollToTop.classList.add('show');
+        } else {
+          scrollToTop.classList.remove('show');
+        }
+      });
+
+      scrollToTop.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+
+      // Virtual Scroll Setup
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.style.opacity = 1;
+              entry.target.style.transform = 'translateY(0)';
+            }
+          });
+        },
+        { root: null, threshold: 0.1 }
+      );
+
+      async function loadSheet(sheetIndex = 0) {
+        currentSheet = sheetIndex;
+        listContainer.innerHTML = '<div class="loading">Memuat data...</div>';
+
+        try {
+          const url = `https://docs.google.com/spreadsheets/d/1B0XPR4uSvRzy9LfzWDjNjwAyMZVtJs6_Kk_r2fh7dTw/gviz/tq?tqx=out:csv&sheet=Sheet${sheetIndex + 1}`;
+          const res = await fetch(url);
+          if (!res.ok) throw new Error(`Network response was not ok: ${res.statusText}`);
+
+          const csvText = await res.text();
+          const rows = csvText.trim().split('\n').map((r) =>
+            r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map((c) => c.replace(/^"|"$/g, '').trim())
+          );
+
+          headers = rows.shift();
+          allData = rows.map((r) =>
+            Object.fromEntries(
+              r.map((c, i) => [
+                headers[i],
+                headers[i].toLowerCase().includes('status') ? c.toLowerCase() : c,
+              ])
+            )
+          );
+          applyFilters();
+        } catch (error) {
+          console.error('Failed to load sheet data:', error);
+          listContainer.innerHTML =
+            '<div class="error">Gagal memuat data. Pastikan Google Sheet bisa diakses publik.</div>';
+        }
+      }
+
+      function applyFilters() {
+        const searchValue = searchInput.value.toLowerCase();
+        const statusValue = statusFilter.value;
+
+        filteredData = allData.filter((row) => {
+          const phone = row['Nomor Telepon'] || row['No Telepon'] || '';
+          const nickname = row['Nickname'] || row['Nama Pemesan'] || row['Nama'] || '';
+          const status = row['Status']?.toLowerCase() || '';
+
+          const matchesSearch =
+            phone.toLowerCase().includes(searchValue) ||
+            nickname.toLowerCase().includes(searchValue);
+          const matchesStatus = statusValue === 'all' || status === statusValue;
+
+          return matchesSearch && matchesStatus;
+        });
+
+        renderList();
+      }
+
+      function renderList() {
+        listContainer.innerHTML = '';
+        const start = (currentPage - 1) * itemsPerPage;
+        const end = start + itemsPerPage;
+        const paginatedData = filteredData.slice(start, end);
+
+        if (paginatedData.length === 0) {
+          listContainer.innerHTML = '<div class="no-data">Tidak ada data yang cocok dengan pencarian Anda.</div>';
+          return;
+        }
+
+        paginatedData.forEach((row, index) => {
+          const id = row['Nomor'] || row[headers[0]] || 'N/A';
+          const nickname = row['Nickname'] || row['Nama Pemesan'] || row['Nama'] || 'Tanpa Nickname';
+          const product = row['Produk'] || 'N/A';
+          const status = row['Status']?.toLowerCase() || 'canceled';
+
+          const card = document.createElement('div');
+          card.className = 'card';
+          card.style.opacity = 0;
+          card.style.transform = 'translateY(20px)';
+          card.style.transition = 'opacity 0.3s var(--ease-in-out), transform 0.3s var(--ease-in-out)';
+          card.style.animationDelay = `${index * 50}ms`;
+
+          const cardHeader = document.createElement('div');
+          cardHeader.className = 'card-header';
+          cardHeader.innerHTML = `
+            <span class="card-id">#${id}</span>
+            <span class="card-nickname">${nickname}</span>
+            <span class="card-product">${product}</span>
+            <span class="card-status ${status}">${status}</span>
+            <svg class="card-arrow" viewBox="0 0 24 24">
+              <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z" />
+            </svg>
+          `;
+
+          const cardDetails = document.createElement('div');
+          cardDetails.className = 'card-details';
+          let detailsHTML = '<div class="card-details-content">';
+          Object.entries(row).forEach(([key, value]) => {
+            const lowerCaseKey = key.toLowerCase();
+            if (
+              key &&
+              value &&
+              lowerCaseKey !== 'nomor' &&
+              lowerCaseKey !== 'nomor telepon' &&
+              lowerCaseKey !== 'no telepon' &&
+              lowerCaseKey !== 'nickname' &&
+              lowerCaseKey !== 'nama pemesan' &&
+              lowerCaseKey !== 'nama' &&
+              lowerCaseKey !== 'produk' &&
+              lowerCaseKey !== 'status'
+            ) {
+              detailsHTML += `<strong>${key}</strong><span>${value}</span>`;
+            }
+          });
+          detailsHTML += '</div>';
+          cardDetails.innerHTML = detailsHTML;
+
+          card.appendChild(cardHeader);
+          card.appendChild(cardDetails);
+          listContainer.appendChild(card);
+
+          cardHeader.addEventListener('click', () => {
+            const isOpen = card.classList.contains('open');
+            document.querySelectorAll('.card').forEach((c) => c.classList.remove('open'));
+            if (!isOpen) card.classList.add('open');
+          });
+
+          observer.observe(card);
+        });
+
+        renderPagination();
+      }
+
+      function renderPagination() {
+        paginationContainer.innerHTML = '';
+        const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+
+        if (totalPages <= 1) return;
+
+        const prevButton = document.createElement('button');
+        prevButton.textContent = 'Sebelumnya';
+        prevButton.disabled = currentPage === 1;
+        prevButton.addEventListener('click', () => {
+          if (currentPage > 1) {
+            currentPage--;
+            renderList();
+            window.scrollTo({ top: listContainer.offsetTop - 150, behavior: 'smooth' });
+          }
+        });
+
+        const nextButton = document.createElement('button');
+        nextButton.textContent = 'Selanjutnya';
+        nextButton.disabled = currentPage === totalPages;
+        nextButton.addEventListener('click', () => {
+          if (currentPage < totalPages) {
+            currentPage++;
+            renderList();
+            window.scrollTo({ top: listContainer.offsetTop - 150, behavior: 'smooth' });
+          }
+        });
+
+        paginationContainer.appendChild(prevButton);
+        paginationContainer.appendChild(nextButton);
+      }
+
+      searchInput.addEventListener('input', () => {
+        currentPage = 1;
+        applyFilters();
+      });
+
+      statusFilter.addEventListener('change', () => {
+        currentPage = 1;
+        applyFilters();
+      });
+
+      sheetFilter.addEventListener('change', () => {
+        currentPage = 1;
+        loadSheet(parseInt(sheetFilter.value));
+      });
+
+      loadSheet(0);
     });
-    return card;
-  }
-
-  // infinite scroll
-  window.addEventListener('scroll', () => {
-    if (window.innerHeight + window.pageYOffset >= document.body.offsetHeight - 300) {
-      if (offset < filtered.length) renderBatch();
-    }
-    topBtn.classList.toggle('show', window.pageYOffset > 400);
-  });
-
-  // back to top
-  topBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
-
-  // search & reset
-  searchEl.addEventListener('input', () => {
-    const q = searchEl.value.toLowerCase();
-    filtered = data.filter(x =>
-      x.nomor.includes(q) || x.nickname.toLowerCase().includes(q) || x.produk.toLowerCase().includes(q)
-    );
-    offset = 0; listEl.innerHTML = '';
-    renderBatch();
-  });
-
-  loadData();
-</script>
-
+  </script>
 </body>
 </html>
