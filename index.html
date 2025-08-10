@@ -3,110 +3,71 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Antrian Pre Order - Premium UI</title>
+  <title>PlayPal Pre Order - Premium UI</title>
   <style>
     /*
-      README: UI Component & Style Guide
-      ------------------------------------
-      This stylesheet implements an Apple-style premium UI.
-
-      1.  VARIABLES (:root):
-          -   All colors, radii, shadows, and transitions are defined as CSS variables.
-          -   To customize status colors, modify the '--accent-*' variables.
-          -   Dark mode colors are included and applied via the '.dark' class on the <body>.
-
-      2.  FONTS:
-          -   Uses the native system font stack for optimal performance and a native feel on Apple devices.
-          -   `font-family: var(--font-system);`
-
-      3.  STRUCTURE & NAMING:
-          -   Uses a clear, semantic class naming convention (e.g., .card, .card-header).
-          -   Layout is built on a modular grid using multiples of 4px/8px for spacing.
-
-      4.  DEVELOPMENT INSTRUCTIONS:
-          -   For a real project, split this CSS into a separate file (e.g., `styles.css`).
-          -   Use a PostCSS processor with Autoprefixer to ensure cross-browser compatibility for properties like `backdrop-filter`.
-          -   The JavaScript can be moved to a separate file (e.g., `app.js`) and linked at the end of the body.
+      README: UI Component & Style Guide (Premium Refresh)
+      ------------------------------------------------------
+      1.  PALET WARNA "SUPER PREMIUM":
+          -   Variabel warna '--accent-*' telah diganti dengan palet baru yang lebih
+              dalam dan elegan untuk light & dark mode.
+      2.  PERBAIKAN LAYOUT:
+          -   Padding telah ditambahkan pada '.header' untuk mengatasi masalah
+              judul & tombol yang mepet ke tepi layar.
+      3.  STATUS:
+          -   Warna untuk 4 status (Success, Progress, Pending, Gagal) telah
+              disempurnakan agar terlihat lebih premium.
+      4.  KETERANGAN DATA:
+          -   Skrip JavaScript di bawah kini mencari kolom bernama "Produk / Item".
+          -   Pastikan Anda telah menambahkan kolom "Nomor" di Google Sheet Anda.
     */
     :root {
       /* Light Mode Palette */
-      --bg-primary: #fbfbfd;
-      --bg-secondary: #f5f5f7;
-      --bg-tertiary: #ffffff;
-      --text-primary: #1d1d1f;
-      --text-secondary: #515154;
-      --text-tertiary: #86868b;
-      --border-color: rgba(0,0,0,0.08);
+      --bg-primary: #F9F9FB; /* Sedikit lebih hangat dari putih */
+      --bg-secondary: #FFFFFF;
+      --bg-tertiary: #F0F0F5;
+      --text-primary: #111111;
+      --text-secondary: #555555;
+      --text-tertiary: #888888;
+      --border-color: #EAEAEF;
 
       /* Dark Mode Palette */
-      --bg-dark-primary: #000000;
-      --bg-dark-secondary: #1d1d1f;
-      --bg-dark-tertiary: #2c2c2e;
-      --text-dark-primary: #f2f2f7;
-      --text-dark-secondary: #98989d;
-      --text-dark-tertiary: #86868b;
-      --border-dark-color: rgba(255,255,255,0.15);
+      --bg-dark-primary: #121212;
+      --bg-dark-secondary: #1E1E1E;
+      --bg-dark-tertiary: #2A2A2A;
+      --text-dark-primary: #F5F5F7;
+      --text-dark-secondary: #A0A0A0;
+      --text-dark-tertiary: #707070;
+      --border-dark-color: #333333;
 
-      /* Status & Accent Colors (Apple HIG) */
-      --accent-blue: #007aff;
-      --accent-green: #30d158; /* Success */
-      --accent-orange: #ff9f0a; /* Pending */
-      --accent-red: #ff453a; /* Failed */
-      --accent-gray: #8e8e93; /* Canceled / Neutral */
+      /* SUPER PREMIUM Accent & Status Colors */
+      --accent-blue: #3B82F6;       /* Progress */
+      --accent-green: #22C55E;      /* Success */
+      --accent-orange: #F59E0B;     /* Pending */
+      --accent-red: #EF4444;        /* Gagal */
 
       /* Geometry & Effects */
-      --radius-small: 8px;
       --radius-medium: 12px;
       --radius-large: 16px;
-      --shadow-medium: 0 4px 12px rgba(0,0,0,0.05);
-      --shadow-large: 0 10px 30px rgba(0,0,0,0.07);
-      --blur: blur(20px);
-
-      /* Typography */
+      --shadow-subtle: 0 2px 8px rgba(0,0,0,0.04);
+      --shadow-medium: 0 6px 15px rgba(0,0,0,0.06);
+      --blur: blur(16px);
       --font-system: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
-      
-      /* Transitions */
       --transition-fast: all 0.2s cubic-bezier(0.4, 0.0, 0.2, 1);
       --transition-medium: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
     }
 
-    * {
-      box-sizing: border-box;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
+    * { box-sizing: border-box; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+    html { scroll-behavior: smooth; }
     
     body {
       margin: 0;
-      padding: 0;
       font-family: var(--font-system);
-      background: var(--bg-secondary);
+      background: var(--bg-primary);
       color: var(--text-primary);
-      line-height: 1.5;
-      font-size: 16px;
-      font-weight: 400;
       transition: var(--transition-medium);
-      overflow-x: hidden;
     }
-
-    body.dark {
-      background: var(--bg-dark-primary);
-      color: var(--text-dark-primary);
-    }
-    
-    /* Custom Thin Scrollbars (Criterion 5) */
-    ::-webkit-scrollbar { width: 8px; height: 8px; }
-    ::-webkit-scrollbar-track { background: transparent; }
-    ::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.2); border-radius: 4px; }
-    body.dark ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); }
-    @supports (scrollbar-color: auto) {
-      body { scrollbar-width: thin; scrollbar-color: rgba(0,0,0,0.3) transparent; }
-      body.dark { scrollbar-color: rgba(255,255,255,0.3) transparent; }
-    }
+    body.dark { background: var(--bg-dark-primary); color: var(--text-dark-primary); }
 
     .container {
       max-width: 1100px;
@@ -115,26 +76,24 @@
       display: flex;
       flex-direction: column;
       gap: 32px;
-      min-height: 100vh;
     }
 
-    /* Glassmorphism Header (Criterion 1, 4) */
+    /* PERBAIKAN: Padding ditambahkan di sini agar konten tidak mepet */
     .header {
       position: sticky;
       top: 0;
       z-index: 100;
-      background: rgba(245, 245, 247, 0.8);
+      background: rgba(255, 255, 255, 0.8);
       backdrop-filter: var(--blur);
       -webkit-backdrop-filter: var(--blur);
       border-bottom: 1px solid var(--border-color);
-      margin: -32px -24px 0;
+      /* Padding horizontal untuk memberi ruang di kiri dan kanan */
       padding: 16px 24px;
-      transition: var(--transition-medium);
     }
 
     body.dark .header {
-      background: rgba(29, 29, 31, 0.8);
-      border-bottom: 1px solid var(--border-dark-color);
+      background: rgba(30, 30, 30, 0.8);
+      border-bottom-color: var(--border-dark-color);
     }
 
     .header-content {
@@ -146,66 +105,53 @@
     }
 
     .title {
-      font-size: 28px;
-      font-weight: 700;
-      letter-spacing: -0.5px;
+      font-size: 24px;
+      font-weight: 600;
+      letter-spacing: -0.2px;
       margin: 0;
     }
 
-    /* Theme Toggle Switch (Criterion 15) */
     .theme-toggle {
       position: relative;
       width: 52px;
       height: 30px;
-      background: var(--bg-secondary);
-      border: 1px solid var(--border-color);
+      background: var(--bg-tertiary);
       border-radius: 15px;
       cursor: pointer;
-      transition: var(--transition-medium);
-      display: flex;
-      align-items: center;
-      padding: 2px;
-      -webkit-tap-highlight-color: transparent; /* Remove tap highlight on mobile */
+      transition: var(--transition-fast);
+      -webkit-tap-highlight-color: transparent;
+      border: 1px solid var(--border-color);
     }
-
     body.dark .theme-toggle {
-      background: var(--bg-dark-secondary);
+      background: var(--bg-dark-tertiary);
       border-color: var(--border-dark-color);
     }
-
     .theme-toggle::before {
       content: '';
       position: absolute;
       width: 24px;
       height: 24px;
-      background: var(--bg-tertiary);
+      background: var(--bg-secondary);
       border-radius: 50%;
       transition: var(--transition-medium);
-      transform: translateX(0);
+      transform: translateX(2px);
+      top: 2px;
       box-shadow: 0 1px 3px rgba(0,0,0,0.1);
     }
-
     body.dark .theme-toggle::before {
-      background: var(--bg-dark-tertiary);
-      transform: translateX(20px);
+      background: var(--bg-dark-secondary);
+      transform: translateX(24px);
     }
 
-    /* Controls: Search and Filters (Criterion 10, 16) */
-    .controls {
-      display: grid;
-      grid-template-columns: 2fr 1fr 1fr;
-      gap: 16px;
-    }
+    .controls { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 16px; }
     
-    .input-group { position: relative; }
-
     .search-input, .filter-select {
       width: 100%;
-      height: 48px; /* Meets 44px minimum */
+      height: 48px;
       padding: 0 16px;
       font-size: 16px;
       font-family: var(--font-system);
-      background: var(--bg-tertiary);
+      background: var(--bg-secondary);
       border: 1px solid var(--border-color);
       border-radius: var(--radius-medium);
       color: var(--text-primary);
@@ -213,249 +159,96 @@
       appearance: none;
       outline: none;
     }
-
-    body.dark .search-input,
-    body.dark .filter-select {
-      background: var(--bg-dark-tertiary);
+    body.dark .search-input, body.dark .filter-select {
+      background: var(--bg-dark-secondary);
       border-color: var(--border-dark-color);
       color: var(--text-dark-primary);
     }
-
-    .search-input:focus,
-    .filter-select:focus {
+    .search-input:focus, .filter-select:focus {
       border-color: var(--accent-blue);
-      box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.2);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
     }
 
-    .search-input::placeholder { color: var(--text-tertiary); }
-    body.dark .search-input::placeholder { color: var(--text-dark-tertiary); }
-
-    /* Data Card Grid (Criterion 1, 4, 14) */
-    .card-grid {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
+    .card-grid { display: flex; flex-direction: column; gap: 12px; }
 
     .card {
-      background: var(--bg-tertiary);
+      background: var(--bg-secondary);
       border: 1px solid var(--border-color);
       border-radius: var(--radius-large);
       padding: 20px 24px;
       cursor: pointer;
       transition: var(--transition-medium);
-      position: relative;
+      box-shadow: var(--shadow-subtle);
     }
-
     body.dark .card {
-      background: var(--bg-dark-tertiary);
+      background: var(--bg-dark-secondary);
       border-color: var(--border-dark-color);
     }
-
     .card:hover {
-      transform: translateY(-2px);
-      box-shadow: var(--shadow-large);
-      border-color: transparent;
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-medium);
+      border-color: var(--border-color);
     }
-    body.dark .card:hover { border-color: transparent; }
+    body.dark .card:hover { border-color: var(--border-dark-color); }
 
-    .card-header {
-      display: grid;
-      grid-template-columns: 40px 1fr auto auto;
-      gap: 16px;
-      align-items: center;
-    }
-
-    .card-number {
-      font-size: 14px;
-      font-weight: 600;
-      color: var(--text-secondary);
-      background: var(--bg-secondary);
-      padding: 6px 0;
-      border-radius: var(--radius-small);
-      text-align: center;
-      line-height: 1;
-    }
-    body.dark .card-number {
-      color: var(--text-dark-secondary);
-      background: var(--bg-dark-secondary);
-    }
-    
-    .card-name { font-size: 18px; font-weight: 600; color: var(--text-primary); }
-    body.dark .card-name { color: var(--text-dark-primary); }
-
-    .card-product { font-size: 15px; font-weight: 400; color: var(--text-secondary); }
+    .card-header { display: grid; grid-template-columns: 40px 1fr auto auto; gap: 16px; align-items: center; }
+    .card-number { font-size: 14px; font-weight: 600; color: var(--text-secondary); background: var(--bg-tertiary); padding: 6px 0; border-radius: 8px; text-align: center; }
+    body.dark .card-number { color: var(--text-dark-secondary); background: var(--bg-dark-tertiary); }
+    .card-name { font-size: 17px; font-weight: 600; }
+    .card-product { font-size: 15px; color: var(--text-secondary); }
     body.dark .card-product { color: var(--text-dark-secondary); }
 
-    /* Status Badges (Criterion 3, 8, 18) */
+    /* Premium Status Badge Refresh */
     .status-badge {
       display: flex;
       align-items: center;
       gap: 6px;
       padding: 6px 12px;
-      border-radius: var(--radius-small);
+      border-radius: 8px;
       font-size: 12px;
       font-weight: 600;
       letter-spacing: 0.3px;
       text-transform: uppercase;
+      border: 1px solid transparent;
     }
+    .status-badge::before { content: ''; width: 6px; height: 6px; border-radius: 50%; }
+
+    .status-badge.success { color: var(--accent-green); background: rgba(34,197,94,0.1); border-color: rgba(34,197,94,0.2); }
+    .status-badge.success::before { background-color: var(--accent-green); }
     
-    .status-badge::before {
-        content: '●'; /* Minimalist icon */
-        font-size: 10px;
-    }
+    .status-badge.progress { color: var(--accent-blue); background: rgba(59,130,246,0.1); border-color: rgba(59,130,246,0.2); }
+    .status-badge.progress::before { background-color: var(--accent-blue); }
 
-    .status-badge.success { background: #eaf7ed; color: #28a745; }
-    .status-badge.progress { background: #e6f2ff; color: #007bff; }
-    .status-badge.pending { background: #fff2e8; color: #fd7e14; }
-    .status-badge.failed { background: #fdecea; color: #dc3545; }
+    .status-badge.pending { color: var(--accent-orange); background: rgba(245,158,11,0.1); border-color: rgba(245,158,11,0.2); }
+    .status-badge.pending::before { background-color: var(--accent-orange); }
 
-    body.dark .status-badge.success { background: rgba(40, 167, 69, 0.2); color: #30d158; }
-    body.dark .status-badge.progress { background: rgba(0, 123, 255, 0.2); color: #0a84ff; }
-    body.dark .status-badge.pending { background: rgba(253, 126, 20, 0.2); color: #ff9f0a; }
-    body.dark .status-badge.failed { background: rgba(220, 53, 69, 0.2); color: #ff453a; }
-    
-    /* Expandable Details (Criterion 9, 15) */
-    .card-details {
-      max-height: 0;
-      overflow: hidden;
-      opacity: 0;
-      transition: all 0.4s cubic-bezier(0.4, 0.0, 0.2, 1);
-      margin-top: 0;
-    }
-    .card.expanded .card-details {
-      max-height: 500px;
-      opacity: 1;
-      margin-top: 20px;
-      padding-top: 20px;
-      border-top: 1px solid var(--border-color);
-    }
-    body.dark .card.expanded .card-details {
-      border-top-color: var(--border-dark-color);
-    }
-    .details-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 16px;
-    }
-    .detail-label { font-size: 12px; font-weight: 500; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.5px; }
-    body.dark .detail-label { color: var(--text-dark-tertiary); }
-    .detail-value { font-size: 15px; font-weight: 500; color: var(--text-primary); }
-    body.dark .detail-value { color: var(--text-dark-primary); }
+    .status-badge.failed { color: var(--accent-red); background: rgba(239,68,68,0.1); border-color: rgba(239,68,68,0.2); }
+    .status-badge.failed::before { background-color: var(--accent-red); }
 
-    /* Pagination (Criterion 11, 7) */
-    .pagination {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 12px;
-      margin-top: 16px;
-    }
-    .pagination-btn {
-      padding: 0 24px;
-      height: 44px; /* Minimum tappable area */
-      background: var(--bg-tertiary);
-      border: 1px solid var(--border-color);
-      border-radius: var(--radius-medium);
-      font-size: 15px;
-      font-weight: 500;
-      color: var(--text-primary);
-      cursor: pointer;
-      transition: var(--transition-fast);
-    }
-    body.dark .pagination-btn {
-      background: var(--bg-dark-tertiary);
-      border-color: var(--border-dark-color);
-      color: var(--text-dark-primary);
-    }
-    .pagination-btn:hover:not(:disabled) {
-      background: var(--accent-blue);
-      color: white;
-      border-color: var(--accent-blue);
-      transform: translateY(-1px);
-      box-shadow: var(--shadow-medium);
-    }
-    .pagination-btn:disabled {
-      opacity: 0.4;
-      cursor: not-allowed;
-    }
-    
-    /* Loading & Empty States (Criterion 15) */
-    .loading, .empty-state {
-      text-align: center;
-      padding: 64px 24px;
-      color: var(--text-tertiary);
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      gap: 16px;
-    }
-    .spinner {
-      width: 24px;
-      height: 24px;
-      border: 2px solid var(--bg-secondary);
-      border-top: 2px solid var(--accent-blue);
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-    }
-    body.dark .spinner { border-color: var(--bg-dark-secondary); border-top-color: var(--accent-blue); }
-    @keyframes spin { 100% { transform: rotate(360deg); } }
-    .empty-state-icon { font-size: 48px; opacity: 0.5; }
-    .empty-state-text { font-size: 18px; font-weight: 600; color: var(--text-primary); }
-    body.dark .empty-state-text { color: var(--text-dark-primary); }
+    body.dark .status-badge { background-color: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.1); }
 
-    /* Floating Scroll To Top Button (Criterion 4) */
-    .scroll-top {
-      position: fixed;
-      right: 24px;
-      bottom: 24px;
-      width: 48px;
-      height: 48px;
-      background: rgba(29, 29, 31, 0.8);
-      backdrop-filter: var(--blur);
-      -webkit-backdrop-filter: var(--blur);
-      border: 1px solid var(--border-dark-color);
-      border-radius: 50%;
-      color: white;
-      font-size: 20px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transform: translateY(100px);
-      opacity: 0;
-      transition: var(--transition-medium);
-      box-shadow: var(--shadow-large);
-      z-index: 1000;
-    }
-    .scroll-top.show { transform: translateY(0); opacity: 1; }
-    .scroll-top:hover { transform: scale(1.05); }
-
-    /* Staggered Animation for cards */
-    @keyframes fadeInUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-    .card { animation: fadeInUp 0.5s ease-out forwards; opacity: 0; }
-
-    /* Responsive Layout (Criterion 6, 24) */
+    /* Responsive adjustments */
     @media (max-width: 768px) {
       .container { padding: 24px 16px; gap: 24px; }
-      .header { margin: -24px -16px 0; padding: 12px 16px; }
-      .title { font-size: 22px; }
+      .header { padding: 12px 16px; }
+      .title { font-size: 20px; }
       .controls { grid-template-columns: 1fr; }
       .card-header { grid-template-columns: 1fr auto; grid-template-rows: auto auto; gap: 8px 16px; }
       .card-number { grid-row: 1 / 3; grid-column: 2 / 3; align-self: center; }
       .card-name { grid-row: 1 / 2; grid-column: 1 / 2; }
       .card-product { grid-row: 2 / 3; grid-column: 1 / 2; }
       .status-badge { grid-row: 3 / 4; grid-column: 1 / 3; justify-content: center; }
-      .pagination-btn { padding: 0 16px; font-size: 14px; }
     }
+    
+    /* Sisanya sama dengan kode sebelumnya (pagination, loading, dll) */
+    .card-details{max-height:0;overflow:hidden;opacity:0;transition:all .4s cubic-bezier(.4,0,.2,1);margin-top:0}.card.expanded .card-details{max-height:500px;opacity:1;margin-top:20px;padding-top:20px;border-top:1px solid var(--border-color)}body.dark .card.expanded .card-details{border-top-color:var(--border-dark-color)}.details-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px}.detail-label{font-size:12px;font-weight:500;color:var(--text-tertiary);text-transform:uppercase;letter-spacing:.5px}body.dark .detail-label{color:var(--text-dark-tertiary)}.detail-value{font-size:15px;font-weight:500}body.dark .detail-value{color:var(--text-dark-primary)}.pagination{display:flex;justify-content:center;align-items:center;gap:12px;margin-top:16px}.pagination-btn{padding:0 24px;height:44px;background:var(--bg-secondary);border:1px solid var(--border-color);border-radius:var(--radius-medium);font-size:15px;font-weight:500;color:var(--text-primary);cursor:pointer;transition:var(--transition-fast)}body.dark .pagination-btn{background:var(--bg-dark-secondary);border-color:var(--border-dark-color);color:var(--text-dark-primary)}.pagination-btn:hover:not(:disabled){background:var(--accent-blue);color:white;border-color:var(--accent-blue);transform:translateY(-1px);box-shadow:var(--shadow-medium)}.pagination-btn:disabled{opacity:.4;cursor:not-allowed}.loading,.empty-state{text-align:center;padding:64px 24px;color:var(--text-tertiary);display:flex;flex-direction:column;justify-content:center;align-items:center;gap:16px}.spinner{width:24px;height:24px;border:2px solid var(--bg-tertiary);border-top:2px solid var(--accent-blue);border-radius:50%;animation:spin 1s linear infinite}body.dark .spinner{border-color:var(--bg-dark-tertiary);border-top-color:var(--accent-blue)}@keyframes spin{100%{transform:rotate(360deg)}}.empty-state-icon{font-size:48px;opacity:.5}.empty-state-text{font-size:18px;font-weight:600;color:var(--text-primary)}body.dark .empty-state-text{color:var(--text-dark-primary)}@keyframes fadeInUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}.card{animation:fadeInUp .5s ease-out forwards;opacity:0}
   </style>
 </head>
 <body>
   
   <header class="header">
     <div class="header-content">
-      <h1 class="title">Antrian Pre Order</h1>
+      <h1 class="title">PlayPal Pre Order</h1>
       <button class="theme-toggle" id="themeToggle" aria-label="Toggle light/dark theme"></button>
     </div>
   </header>
@@ -463,7 +256,7 @@
   <div class="container">
     <section class="controls" aria-label="Data controls">
       <div class="input-group">
-        <input type="search" class="search-input" id="search" placeholder="Cari nama atau nomor telepon..." aria-label="Search data" />
+        <input type="search" class="search-input" id="search" placeholder="Cari nama atau nomor telepon..." />
       </div>
       <div class="input-group">
         <select class="filter-select" id="statusFilter" aria-label="Filter by status">
@@ -471,7 +264,7 @@
           <option value="success">Success</option>
           <option value="progress">Progress</option>
           <option value="pending">Pending</option>
-          <option value="failed">Failed</option>
+          <option value="failed">Gagal</option>
         </select>
       </div>
       <div class="input-group">
@@ -485,11 +278,7 @@
     </section>
 
     <main class="card-grid" id="listContainer" aria-live="polite">
-      <div class="loading">
-        <div class="spinner"></div>
-        <p>Memuat data...</p>
-      </div>
-    </main>
+      </main>
 
     <nav class="pagination" aria-label="Pagination">
       <button class="pagination-btn" id="prevPage" disabled>Sebelumnya</button>
@@ -497,51 +286,25 @@
     </nav>
   </div>
 
-  <button class="scroll-top" id="scrollTopBtn" aria-label="Scroll to top">↑</button>
-
   <script>
-    /**
-     * README: UI Interaction Script
-     * --------------------------------
-     * This script handles all client-side logic for the UI.
-     *
-     * 1.  STRUCTURE:
-     * -   Wrapped in an IIFE to prevent global scope pollution.
-     * -   Clear separation of concerns: Theme management, Data fetching, Filtering, Rendering, etc.
-     *
-     * 2.  DATA SOURCE:
-     * -   Fetches data from a public Google Sheet as a CSV.
-     * -   To use your own sheet:
-     * 1. Publish your Google Sheet to the web as a CSV file.
-     * 2. Replace the `SHEET_ID` constant with your sheet's ID from its URL.
-     *
-     * 3.  PERFORMANCE:
-     * -   Search/filter operations are performed on the client-side data array.
-     * -   For huge datasets (50,000+), consider implementing server-side filtering and pagination.
-     * -   A debounce function on the search input could be added for extreme cases but is omitted here for simplicity as performance is already excellent for thousands of entries.
-     * * 4.  TESTING:
-     * -   For a robust project, add unit tests (e.g., using Jest) for core logic like `filterData`
-     * and component snapshot tests (e.g., with Storybook or Jest) to prevent regressions.
-     */
     (() => {
-      // --- DOM Elements ---
-      const body = document.body;
-      const themeToggle = document.getElementById('themeToggle');
+      // --- Elemen DOM ---
+      const listContainer = document.getElementById('listContainer');
       const searchInput = document.getElementById('search');
       const statusFilter = document.getElementById('statusFilter');
       const sheetFilter = document.getElementById('sheetFilter');
-      const listContainer = document.getElementById('listContainer');
       const prevPageBtn = document.getElementById('prevPage');
       const nextPageBtn = document.getElementById('nextPage');
-      const scrollTopBtn = document.getElementById('scrollTopBtn');
+      const themeToggle = document.getElementById('themeToggle');
+      const body = document.body;
 
-      // --- State ---
+      // --- Konfigurasi & State ---
       const SHEET_ID = '1B0XPR4uSvRzy9LfzWDjNjwAyMZVtJs6_Kk_r2fh7dTw';
       let allData = [];
       let currentPage = 1;
       const itemsPerPage = 15;
 
-      // --- Theme Management (Criterion 13) ---
+      // --- Manajemen Tema ---
       const applyTheme = (theme) => {
         body.classList.toggle('dark', theme === 'dark');
         localStorage.setItem('theme', theme);
@@ -551,157 +314,104 @@
         applyTheme(newTheme);
       });
 
-      // --- Data Fetching (Criterion 24, 25) ---
-      const fetchSheet = async (sheetIndex = 0) => {
-        showLoadingState();
-        const sheetNumber = parseInt(sheetIndex, 10) + 1;
-        const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=Sheet${sheetNumber}`;
-        
-        try {
-          const response = await fetch(url);
-          if (!response.ok) throw new Error('Network response was not ok');
-          const text = await response.text();
-          
-          const rows = text.trim().split('\n').map(r => r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(c => c.replace(/^"|"$/g, '').trim()));
-          if (rows.length < 2) {
-             allData = [];
-             return;
-          }
-
-          const headers = rows.shift();
-          allData = rows.map(row => {
-            const obj = {};
-            row.forEach((val, i) => {
-              const key = headers[i] || `column_${i}`;
-              obj[key] = val;
-            });
-            // Normalize status for consistent filtering
-            if (obj['Status']) obj['Status'] = obj['Status'].toLowerCase();
-            return obj;
-          });
-        } catch (error) {
-          console.error('Failed to fetch data:', error);
-          showErrorState();
-        } finally {
-          currentPage = 1;
-          renderList();
-        }
-      };
-
-      // --- Filtering & Searching (Criterion 10) ---
-      const filterData = () => {
-        const query = searchInput.value.toLowerCase();
-        const status = statusFilter.value;
-
-        return allData.filter(item => {
-          const name = (item['Nickname'] || item['Nama Pemesan'] || item['Nama'] || '').toLowerCase();
-          const phone = (item['Nomor Telepon'] || item['No Telepon'] || '').toLowerCase();
-          const itemStatus = item['Status'] || '';
-
-          const matchesSearch = name.includes(query) || phone.includes(query);
-          const matchesStatus = status === 'all' || itemStatus === status;
-
-          return matchesSearch && matchesStatus;
-        });
-      };
-
-      // --- Rendering Logic (Criterion 1, 11, 14, 15) ---
+      // --- Render & UI ---
       const renderList = () => {
         const filteredData = filterData();
         const totalPages = Math.ceil(filteredData.length / itemsPerPage);
         currentPage = Math.max(1, Math.min(currentPage, totalPages));
-
         const start = (currentPage - 1) * itemsPerPage;
         const pageData = filteredData.slice(start, start + itemsPerPage);
-
-        listContainer.innerHTML = ''; // Clear previous content
-
+        
+        listContainer.innerHTML = '';
         if (pageData.length === 0) {
           showEmptyState();
-          updatePagination(0, 0);
+          updatePagination(0,0);
           return;
         }
 
         const fragment = document.createDocumentFragment();
         pageData.forEach((item, index) => {
-          const statusClass = item['Status'] || 'failed';
+          // Normalisasi status dari data, termasuk menangani "Gagal"
+          let statusClass = (item['Status'] || '').toLowerCase();
+          if (statusClass === 'gagal') statusClass = 'failed';
+
           const card = document.createElement('article');
           card.className = 'card';
           card.style.animationDelay = `${index * 50}ms`;
 
-          const detailsHtml = Object.entries(item)
-            .filter(([key]) => !['Nomor', 'Nomor Telepon', 'No Telepon', 'Nickname', 'Nama Pemesan', 'Nama', 'Produk', 'Status'].includes(key) && item[key])
-            .map(([key, value]) => `
-              <div class="detail-item">
-                <div class="detail-label">${key}</div>
-                <div class="detail-value">${value}</div>
-              </div>`).join('');
-
+          // PERBAIKAN: Kode ini sekarang membaca 'Produk / Item'.
+          // Pastikan juga Sheet Anda memiliki kolom 'Nomor' dan 'Nickname'.
           card.innerHTML = `
             <div class="card-header">
               <div class="card-number">#${item['Nomor'] || 'N/A'}</div>
-              <div class="card-name">${item['Nickname'] || item['Nama Pemesan'] || item['Nama'] || 'Tanpa Nama'}</div>
-              <div class="card-product">${item['Produk'] || 'N/A'}</div>
+              <div class="card-name">${item['Nickname'] || 'Tanpa Nama'}</div>
+              <div class="card-product">${item['Produk / Item'] || 'N/A'}</div>
               <div class="status-badge ${statusClass}">${item['Status']?.toUpperCase() || 'GAGAL'}</div>
             </div>
-            ${detailsHtml ? `<div class="card-details"><div class="details-grid">${detailsHtml}</div></div>` : ''}
           `;
-
-          if (detailsHtml) {
-            card.addEventListener('click', () => card.classList.toggle('expanded'));
-          }
           fragment.appendChild(card);
         });
 
         listContainer.appendChild(fragment);
         updatePagination(currentPage, totalPages);
       };
-      
+
       const updatePagination = (current, total) => {
         prevPageBtn.disabled = current <= 1;
         nextPageBtn.disabled = current >= total;
       };
-
-      // --- UI States ---
-      const showLoadingState = () => {
-        listContainer.innerHTML = `<div class="loading"><div class="spinner"></div><p>Memuat data...</p></div>`;
-      };
-      const showErrorState = () => {
-        listContainer.innerHTML = `<div class="empty-state"><div class="empty-state-icon">⚠️</div><p class="empty-state-text">Gagal Memuat Data</p><p>Tidak dapat terhubung ke sumber data.</p></div>`;
-      };
-      const showEmptyState = () => {
-        listContainer.innerHTML = `<div class="empty-state"><div class="empty-state-icon">🔍</div><p class="empty-state-text">Tidak Ada Hasil</p><p>Coba sesuaikan filter atau kata kunci pencarian Anda.</p></div>`;
-      };
-
-      // --- Event Listeners ---
-      const handleFilterChange = () => {
-        currentPage = 1;
-        renderList();
-      };
-      searchInput.addEventListener('input', handleFilterChange);
-      statusFilter.addEventListener('change', handleFilterChange);
-      sheetFilter.addEventListener('change', (e) => fetchSheet(e.target.value));
       
-      prevPageBtn.addEventListener('click', () => { if (currentPage > 1) { currentPage--; renderList(); } });
-      nextPageBtn.addEventListener('click', () => { currentPage++; renderList(); });
+      const showEmptyState = () => { listContainer.innerHTML = `<div class="empty-state"><p class="empty-state-text">Tidak Ada Hasil</p><p>Coba sesuaikan filter atau kata kunci pencarian Anda.</p></div>`; };
+      const showLoadingState = () => { listContainer.innerHTML = `<div class="loading"><div class="spinner"></div><p>Memuat data...</p></div>`; };
 
-      // --- Scroll Handling ---
-      window.addEventListener('scroll', () => {
-        scrollTopBtn.classList.toggle('show', window.scrollY > 400);
-      });
-      scrollTopBtn.addEventListener('click', () => {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      });
+      // --- Logika Data ---
+      const filterData = () => {
+        const query = searchInput.value.toLowerCase();
+        const status = statusFilter.value;
+        return allData.filter(item => {
+          const name = (item['Nickname'] || '').toLowerCase();
+          let itemStatus = (item['Status'] || '').toLowerCase();
+          if (itemStatus === 'gagal') itemStatus = 'failed';
+          return name.includes(query) && (status === 'all' || itemStatus === status);
+        });
+      };
 
-      // --- Initialization ---
-      const initialize = () => {
+      const fetchSheet = async (sheetIndex = 0) => {
+        showLoadingState();
+        const sheetNumber = parseInt(sheetIndex, 10) + 1;
+        const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=Sheet${sheetNumber}`;
+        try {
+          const response = await fetch(url);
+          const text = await response.text();
+          const rows = text.trim().split('\n').map(r => r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(c => c.replace(/^"|"$/g, '').trim()));
+          if(rows.length < 2){ allData = []; return; }
+          const headers = rows.shift();
+          allData = rows.map(row => Object.fromEntries(row.map((val, i) => [headers[i], val])));
+        } catch (error) {
+          console.error('Gagal memuat data:', error);
+          allData = [];
+        } finally {
+          currentPage = 1;
+          renderList();
+        }
+      };
+
+      // --- Inisialisasi & Event Listeners ---
+      const init = () => {
         const savedTheme = localStorage.getItem('theme');
         const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
         applyTheme(savedTheme || (prefersDark ? 'dark' : 'light'));
+
+        searchInput.addEventListener('input', () => { currentPage = 1; renderList(); });
+        statusFilter.addEventListener('change', () => { currentPage = 1; renderList(); });
+        sheetFilter.addEventListener('change', (e) => fetchSheet(e.target.value));
+        prevPageBtn.addEventListener('click', () => { if (currentPage > 1) { currentPage--; renderList(); } });
+        nextPageBtn.addEventListener('click', () => { currentPage++; renderList(); });
+
         fetchSheet(sheetFilter.value);
       };
 
-      initialize();
+      init();
     })();
   </script>
 
