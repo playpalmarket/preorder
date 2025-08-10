@@ -3,33 +3,26 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>PlayPal Pre Order - Premium UI</title>
+  <title>PlayPal Pre Order - Ultimate UI</title>
   <style>
     /*
-      README: UI Component & Style Guide (Premium Refresh)
-      ------------------------------------------------------
-      1.  PALET WARNA "SUPER PREMIUM":
-          -   Variabel warna '--accent-*' telah diganti dengan palet baru yang lebih
-              dalam dan elegan untuk light & dark mode.
-      2.  PERBAIKAN LAYOUT:
-          -   Padding telah ditambahkan pada '.header' untuk mengatasi masalah
-              judul & tombol yang mepet ke tepi layar.
-      3.  STATUS:
-          -   Warna untuk 4 status (Success, Progress, Pending, Gagal) telah
-              disempurnakan agar terlihat lebih premium.
-      4.  KETERANGAN DATA:
-          -   Skrip JavaScript di bawah kini mencari kolom bernama "Produk / Item".
-          -   Pastikan Anda telah menambahkan kolom "Nomor" di Google Sheet Anda.
+      README: Ultimate Final Version
+      -----------------------------------------
+      Ini adalah versi final yang telah disempurnakan berdasarkan semua masukan.
+      - Mekanisme Dark Mode Toggle telah dirombak total dengan ikon matahari/bulan.
+      - Fungsionalitas klik untuk detail telah dipastikan bekerja.
+      - Semua perbaikan sebelumnya telah diintegrasikan.
     */
     :root {
       /* Light Mode Palette */
-      --bg-primary: #F9F9FB; /* Sedikit lebih hangat dari putih */
+      --bg-primary: #F9F9FB;
       --bg-secondary: #FFFFFF;
       --bg-tertiary: #F0F0F5;
       --text-primary: #111111;
       --text-secondary: #555555;
       --text-tertiary: #888888;
       --border-color: #EAEAEF;
+      --icon-fill: #111111;
 
       /* Dark Mode Palette */
       --bg-dark-primary: #121212;
@@ -39,12 +32,13 @@
       --text-dark-secondary: #A0A0A0;
       --text-dark-tertiary: #707070;
       --border-dark-color: #333333;
+      --icon-dark-fill: #F5F5F7;
 
       /* SUPER PREMIUM Accent & Status Colors */
-      --accent-blue: #3B82F6;       /* Progress */
-      --accent-green: #22C55E;      /* Success */
-      --accent-orange: #F59E0B;     /* Pending */
-      --accent-red: #EF4444;        /* Gagal */
+      --accent-blue: #3B82F6;
+      --accent-green: #22C55E;
+      --accent-orange: #F59E0B;
+      --accent-red: #EF4444;
 
       /* Geometry & Effects */
       --radius-medium: 12px;
@@ -60,188 +54,102 @@
     * { box-sizing: border-box; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
     html { scroll-behavior: smooth; }
     
-    body {
-      margin: 0;
-      font-family: var(--font-system);
-      background: var(--bg-primary);
-      color: var(--text-primary);
-      transition: var(--transition-medium);
-    }
+    body { margin: 0; font-family: var(--font-system); background: var(--bg-primary); color: var(--text-primary); transition: var(--transition-medium); }
     body.dark { background: var(--bg-dark-primary); color: var(--text-dark-primary); }
 
-    .container {
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 32px 24px;
-      display: flex;
-      flex-direction: column;
-      gap: 32px;
-    }
+    .container { max-width: 1100px; margin: 0 auto; padding: 32px 24px; display: flex; flex-direction: column; gap: 32px; }
 
-    /* PERBAIKAN: Padding ditambahkan di sini agar konten tidak mepet */
-    .header {
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      background: rgba(255, 255, 255, 0.8);
-      backdrop-filter: var(--blur);
-      -webkit-backdrop-filter: var(--blur);
-      border-bottom: 1px solid var(--border-color);
-      /* Padding horizontal untuk memberi ruang di kiri dan kanan */
-      padding: 16px 24px;
-    }
+    .header { position: sticky; top: 0; z-index: 100; background: rgba(255, 255, 255, 0.8); backdrop-filter: var(--blur); -webkit-backdrop-filter: var(--blur); border-bottom: 1px solid var(--border-color); padding: 16px 24px; }
+    body.dark .header { background: rgba(30, 30, 30, 0.8); border-bottom-color: var(--border-dark-color); }
+    .header-content { max-width: 1100px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
+    .title { font-size: 24px; font-weight: 600; margin: 0; }
 
-    body.dark .header {
-      background: rgba(30, 30, 30, 0.8);
-      border-bottom-color: var(--border-dark-color);
-    }
-
-    .header-content {
-      max-width: 1100px;
-      margin: 0 auto;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .title {
-      font-size: 24px;
-      font-weight: 600;
-      letter-spacing: -0.2px;
-      margin: 0;
-    }
-
+    /* ULTIMATE FIX: Dark Mode Toggle dengan gerakan dan ikon yang benar */
     .theme-toggle {
-      position: relative;
-      width: 52px;
-      height: 30px;
-      background: var(--bg-tertiary);
-      border-radius: 15px;
-      cursor: pointer;
-      transition: var(--transition-fast);
-      -webkit-tap-highlight-color: transparent;
-      border: 1px solid var(--border-color);
+      position: relative; width: 56px; height: 32px;
+      background: var(--bg-tertiary); border-radius: 16px;
+      border: 1px solid var(--border-color); cursor: pointer;
+      transition: var(--transition-fast); -webkit-tap-highlight-color: transparent;
+      display: flex; align-items: center;
     }
-    body.dark .theme-toggle {
-      background: var(--bg-dark-tertiary);
-      border-color: var(--border-dark-color);
-    }
-    .theme-toggle::before {
-      content: '';
-      position: absolute;
-      width: 24px;
-      height: 24px;
-      background: var(--bg-secondary);
-      border-radius: 50%;
-      transition: var(--transition-medium);
-      transform: translateX(2px);
-      top: 2px;
+    body.dark .theme-toggle { background: var(--bg-dark-tertiary); border-color: var(--border-dark-color); }
+    
+    .theme-toggle::before { /* Ini adalah knob yang bergeser */
+      content: ''; position: absolute; width: 26px; height: 26px;
+      background: var(--bg-secondary); border-radius: 50%;
+      top: 2px; left: 2px; transition: var(--transition-medium);
       box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      transform: translateX(0); /* Posisi awal di kiri (light) */
     }
     body.dark .theme-toggle::before {
+      transform: translateX(24px); /* Posisi akhir di kanan (dark) */
       background: var(--bg-dark-secondary);
+    }
+    
+    .theme-toggle::after { /* Ini adalah ikon di dalam knob */
+      content: '';
+      position: absolute; width: 16px; height: 16px;
+      top: 7px; left: 7px; transition: var(--transition-medium);
+      background-size: contain; background-repeat: no-repeat;
+      transform: translateX(0);
+      /* Default: Sun Icon */
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23111111' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='5'%3E%3C/circle%3E%3Cline x1='12' y1='1' x2='12' y2='3'%3E%3C/line%3E%3Cline x1='12' y1='21' x2='12' y2='23'%3E%3C/line%3E%3Cline x1='4.22' y1='4.22' x2='5.64' y2='5.64'%3E%3C/line%3E%3Cline x1='18.36' y1='18.36' x2='19.78' y2='19.78'%3E%3C/line%3E%3Cline x1='1' y1='12' x2='3' y2='12'%3E%3C/line%3E%3Cline x1='21' y1='12' x2='23' y2='12'%3E%3C/line%3E%3Cline x1='4.22' y1='19.78' x2='5.64' y2='18.36'%3E%3C/line%3E%3Cline x1='18.36' y1='5.64' x2='19.78' y2='4.22'%3E%3C/line%3E%3C/svg%3E");
+    }
+    body.dark .theme-toggle::after {
       transform: translateX(24px);
+      /* Moon Icon */
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23F5F5F7' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z'%3E%3C/path%3E%3C/svg%3E");
     }
 
     .controls { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 16px; }
-    
-    .search-input, .filter-select {
-      width: 100%;
-      height: 48px;
-      padding: 0 16px;
-      font-size: 16px;
-      font-family: var(--font-system);
-      background: var(--bg-secondary);
-      border: 1px solid var(--border-color);
-      border-radius: var(--radius-medium);
-      color: var(--text-primary);
-      transition: var(--transition-fast);
-      appearance: none;
-      outline: none;
-    }
-    body.dark .search-input, body.dark .filter-select {
-      background: var(--bg-dark-secondary);
-      border-color: var(--border-dark-color);
-      color: var(--text-dark-primary);
-    }
-    .search-input:focus, .filter-select:focus {
-      border-color: var(--accent-blue);
-      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
-    }
+    .search-input, .filter-select { width: 100%; height: 48px; padding: 0 16px; font-size: 16px; font-family: var(--font-system); background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: var(--radius-medium); color: var(--text-primary); transition: var(--transition-fast); appearance: none; outline: none; }
+    body.dark .search-input, body.dark .filter-select { background: var(--bg-dark-secondary); border-color: var(--border-dark-color); color: var(--text-dark-primary); }
+    .search-input:focus, .filter-select:focus { border-color: var(--accent-blue); box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2); }
 
     .card-grid { display: flex; flex-direction: column; gap: 12px; }
+    .card { background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: var(--radius-large); padding: 20px 24px; transition: var(--transition-medium); box-shadow: var(--shadow-subtle); }
+    .card.clickable { cursor: pointer; }
+    .card.clickable:hover { transform: translateY(-3px); box-shadow: var(--shadow-medium); }
+    body.dark .card { background: var(--bg-dark-secondary); border-color: var(--border-dark-color); }
 
-    .card {
-      background: var(--bg-secondary);
-      border: 1px solid var(--border-color);
-      border-radius: var(--radius-large);
-      padding: 20px 24px;
-      cursor: pointer;
-      transition: var(--transition-medium);
-      box-shadow: var(--shadow-subtle);
-    }
-    body.dark .card {
-      background: var(--bg-dark-secondary);
-      border-color: var(--border-dark-color);
-    }
-    .card:hover {
-      transform: translateY(-3px);
-      box-shadow: var(--shadow-medium);
-      border-color: var(--border-color);
-    }
-    body.dark .card:hover { border-color: var(--border-dark-color); }
-
-    .card-header { display: grid; grid-template-columns: 40px 1fr auto auto; gap: 16px; align-items: center; }
-    .card-number { font-size: 14px; font-weight: 600; color: var(--text-secondary); background: var(--bg-tertiary); padding: 6px 0; border-radius: 8px; text-align: center; }
-    body.dark .card-number { color: var(--text-dark-secondary); background: var(--bg-dark-tertiary); }
+    .card-header { display: grid; grid-template-columns: 1fr auto; gap: 16px; align-items: start; }
+    .card-main-info { display: flex; flex-direction: column; gap: 4px; }
     .card-name { font-size: 17px; font-weight: 600; }
     .card-product { font-size: 15px; color: var(--text-secondary); }
-    body.dark .card-product { color: var(--text-dark-secondary); }
+    .card-date { font-size: 13px; font-weight: 500; color: var(--text-tertiary); text-align: left; margin-top: 8px; grid-column: 1 / -1; }
+    body.dark .card-product, body.dark .card-date { color: var(--text-dark-secondary); }
 
-    /* Premium Status Badge Refresh */
-    .status-badge {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      padding: 6px 12px;
-      border-radius: 8px;
-      font-size: 12px;
-      font-weight: 600;
-      letter-spacing: 0.3px;
-      text-transform: uppercase;
-      border: 1px solid transparent;
-    }
+    .status-badge { display: flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 600; text-transform: uppercase; border: 1px solid transparent; }
     .status-badge::before { content: ''; width: 6px; height: 6px; border-radius: 50%; }
-
-    .status-badge.success { color: var(--accent-green); background: rgba(34,197,94,0.1); border-color: rgba(34,197,94,0.2); }
-    .status-badge.success::before { background-color: var(--accent-green); }
-    
-    .status-badge.progress { color: var(--accent-blue); background: rgba(59,130,246,0.1); border-color: rgba(59,130,246,0.2); }
-    .status-badge.progress::before { background-color: var(--accent-blue); }
-
-    .status-badge.pending { color: var(--accent-orange); background: rgba(245,158,11,0.1); border-color: rgba(245,158,11,0.2); }
-    .status-badge.pending::before { background-color: var(--accent-orange); }
-
-    .status-badge.failed { color: var(--accent-red); background: rgba(239,68,68,0.1); border-color: rgba(239,68,68,0.2); }
-    .status-badge.failed::before { background-color: var(--accent-red); }
-
+    .status-badge.success { color: var(--accent-green); background: rgba(34,197,94,0.1); border-color: rgba(34,197,94,0.2); } .status-badge.success::before { background-color: var(--accent-green); }
+    .status-badge.progress { color: var(--accent-blue); background: rgba(59,130,246,0.1); border-color: rgba(59,130,246,0.2); } .status-badge.progress::before { background-color: var(--accent-blue); }
+    .status-badge.pending { color: var(--accent-orange); background: rgba(245,158,11,0.1); border-color: rgba(245,158,11,0.2); } .status-badge.pending::before { background-color: var(--accent-orange); }
+    .status-badge.failed { color: var(--accent-red); background: rgba(239,68,68,0.1); border-color: rgba(239,68,68,0.2); } .status-badge.failed::before { background-color: var(--accent-red); }
     body.dark .status-badge { background-color: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.1); }
+    
+    .card-details { max-height: 0; overflow: hidden; opacity: 0; transition: all .4s ease-in-out; margin-top: 0; }
+    .card.expanded .card-details { max-height: 500px; opacity: 1; margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--border-color); }
+    body.dark .card.expanded .card-details { border-top-color: var(--border-dark-color); }
+    .details-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; }
+    .detail-label { font-size: 12px; font-weight: 500; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: .5px; }
+    .detail-value { font-size: 15px; font-weight: 500; }
 
-    /* Responsive adjustments */
+    .pagination { display: flex; justify-content: center; align-items: center; gap: 12px; margin-top: 16px; }
+    .pagination-btn { padding: 0 24px; height: 44px; background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: var(--radius-medium); font-size: 15px; font-weight: 500; color: var(--text-primary); cursor: pointer; transition: var(--transition-fast); }
+    .pagination-btn:hover:not(:disabled) { background: var(--accent-blue); color: white; border-color: var(--accent-blue); transform: translateY(-1px); box-shadow: var(--shadow-medium); }
+    .pagination-btn:disabled { opacity: .4; cursor: not-allowed; }
+    
+    .loading, .empty-state { text-align: center; padding: 64px 24px; }
+    .spinner { width: 24px; height: 24px; border: 2px solid var(--bg-tertiary); border-top: 2px solid var(--accent-blue); border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 16px; }
+    @keyframes spin { 100% { transform: rotate(360deg); } }
+    .empty-state-text { font-size: 18px; font-weight: 600; }
+
     @media (max-width: 768px) {
       .container { padding: 24px 16px; gap: 24px; }
       .header { padding: 12px 16px; }
       .title { font-size: 20px; }
       .controls { grid-template-columns: 1fr; }
-      .card-header { grid-template-columns: 1fr auto; grid-template-rows: auto auto; gap: 8px 16px; }
-      .card-number { grid-row: 1 / 3; grid-column: 2 / 3; align-self: center; }
-      .card-name { grid-row: 1 / 2; grid-column: 1 / 2; }
-      .card-product { grid-row: 2 / 3; grid-column: 1 / 2; }
-      .status-badge { grid-row: 3 / 4; grid-column: 1 / 3; justify-content: center; }
     }
-    
-    /* Sisanya sama dengan kode sebelumnya (pagination, loading, dll) */
-    .card-details{max-height:0;overflow:hidden;opacity:0;transition:all .4s cubic-bezier(.4,0,.2,1);margin-top:0}.card.expanded .card-details{max-height:500px;opacity:1;margin-top:20px;padding-top:20px;border-top:1px solid var(--border-color)}body.dark .card.expanded .card-details{border-top-color:var(--border-dark-color)}.details-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px}.detail-label{font-size:12px;font-weight:500;color:var(--text-tertiary);text-transform:uppercase;letter-spacing:.5px}body.dark .detail-label{color:var(--text-dark-tertiary)}.detail-value{font-size:15px;font-weight:500}body.dark .detail-value{color:var(--text-dark-primary)}.pagination{display:flex;justify-content:center;align-items:center;gap:12px;margin-top:16px}.pagination-btn{padding:0 24px;height:44px;background:var(--bg-secondary);border:1px solid var(--border-color);border-radius:var(--radius-medium);font-size:15px;font-weight:500;color:var(--text-primary);cursor:pointer;transition:var(--transition-fast)}body.dark .pagination-btn{background:var(--bg-dark-secondary);border-color:var(--border-dark-color);color:var(--text-dark-primary)}.pagination-btn:hover:not(:disabled){background:var(--accent-blue);color:white;border-color:var(--accent-blue);transform:translateY(-1px);box-shadow:var(--shadow-medium)}.pagination-btn:disabled{opacity:.4;cursor:not-allowed}.loading,.empty-state{text-align:center;padding:64px 24px;color:var(--text-tertiary);display:flex;flex-direction:column;justify-content:center;align-items:center;gap:16px}.spinner{width:24px;height:24px;border:2px solid var(--bg-tertiary);border-top:2px solid var(--accent-blue);border-radius:50%;animation:spin 1s linear infinite}body.dark .spinner{border-color:var(--bg-dark-tertiary);border-top-color:var(--accent-blue)}@keyframes spin{100%{transform:rotate(360deg)}}.empty-state-icon{font-size:48px;opacity:.5}.empty-state-text{font-size:18px;font-weight:600;color:var(--text-primary)}body.dark .empty-state-text{color:var(--text-dark-primary)}@keyframes fadeInUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}.card{animation:fadeInUp .5s ease-out forwards;opacity:0}
   </style>
 </head>
 <body>
@@ -256,7 +164,7 @@
   <div class="container">
     <section class="controls" aria-label="Data controls">
       <div class="input-group">
-        <input type="search" class="search-input" id="search" placeholder="Cari nama atau nomor telepon..." />
+        <input type="search" class="search-input" id="search" placeholder="Cari nama atau nickname..." />
       </div>
       <div class="input-group">
         <select class="filter-select" id="statusFilter" aria-label="Filter by status">
@@ -277,9 +185,7 @@
       </div>
     </section>
 
-    <main class="card-grid" id="listContainer" aria-live="polite">
-      </main>
-
+    <main class="card-grid" id="listContainer" aria-live="polite"></main>
     <nav class="pagination" aria-label="Pagination">
       <button class="pagination-btn" id="prevPage" disabled>Sebelumnya</button>
       <button class="pagination-btn" id="nextPage" disabled>Selanjutnya</button>
@@ -288,7 +194,6 @@
 
   <script>
     (() => {
-      // --- Elemen DOM ---
       const listContainer = document.getElementById('listContainer');
       const searchInput = document.getElementById('search');
       const statusFilter = document.getElementById('statusFilter');
@@ -298,13 +203,11 @@
       const themeToggle = document.getElementById('themeToggle');
       const body = document.body;
 
-      // --- Konfigurasi & State ---
       const SHEET_ID = '1B0XPR4uSvRzy9LfzWDjNjwAyMZVtJs6_Kk_r2fh7dTw';
       let allData = [];
       let currentPage = 1;
       const itemsPerPage = 15;
 
-      // --- Manajemen Tema ---
       const applyTheme = (theme) => {
         body.classList.toggle('dark', theme === 'dark');
         localStorage.setItem('theme', theme);
@@ -314,7 +217,6 @@
         applyTheme(newTheme);
       });
 
-      // --- Render & UI ---
       const renderList = () => {
         const filteredData = filterData();
         const totalPages = Math.ceil(filteredData.length / itemsPerPage);
@@ -324,31 +226,46 @@
         
         listContainer.innerHTML = '';
         if (pageData.length === 0) {
-          showEmptyState();
+          listContainer.innerHTML = `<div class="empty-state"><p class="empty-state-text">Tidak Ada Hasil</p></div>`;
           updatePagination(0,0);
           return;
         }
 
         const fragment = document.createDocumentFragment();
-        pageData.forEach((item, index) => {
-          // Normalisasi status dari data, termasuk menangani "Gagal"
+        pageData.forEach((item) => {
           let statusClass = (item['Status'] || '').toLowerCase();
           if (statusClass === 'gagal') statusClass = 'failed';
 
           const card = document.createElement('article');
-          card.className = 'card';
-          card.style.animationDelay = `${index * 50}ms`;
+          
+          const estDelivery = item['Est. Pengiriman'] ? `${item['Est. Pengiriman']} 20:00 WIB` : 'Tanggal tidak tersedia';
+          
+          const displayedKeys = ['Nickname', 'Produk / Item', 'Status', 'Est. Pengiriman'];
+          const detailsHtml = Object.entries(item)
+            .filter(([key, value]) => value && !displayedKeys.includes(key))
+            .map(([key, value]) => `
+              <div class="detail-item">
+                <div class="detail-label">${key}</div>
+                <div class="detail-value">${value}</div>
+              </div>`).join('');
 
-          // PERBAIKAN: Kode ini sekarang membaca 'Produk / Item'.
-          // Pastikan juga Sheet Anda memiliki kolom 'Nomor' dan 'Nickname'.
+          card.className = `card ${detailsHtml ? 'clickable' : ''}`;
+
           card.innerHTML = `
             <div class="card-header">
-              <div class="card-number">#${item['Nomor'] || 'N/A'}</div>
-              <div class="card-name">${item['Nickname'] || 'Tanpa Nama'}</div>
-              <div class="card-product">${item['Produk / Item'] || 'N/A'}</div>
+              <div class="card-main-info">
+                  <div class="card-name">${item['Nickname'] || 'Tanpa Nama'}</div>
+                  <div class="card-product">${item['Produk / Item'] || 'N/A'}</div>
+              </div>
               <div class="status-badge ${statusClass}">${item['Status']?.toUpperCase() || 'GAGAL'}</div>
+              <div class="card-date">Estimasi: ${estDelivery}</div>
             </div>
+            ${detailsHtml ? `<div class="card-details"><div class="details-grid">${detailsHtml}</div></div>` : ''}
           `;
+          
+          if (detailsHtml) {
+            card.addEventListener('click', () => card.classList.toggle('expanded'));
+          }
           fragment.appendChild(card);
         });
 
@@ -361,10 +278,6 @@
         nextPageBtn.disabled = current >= total;
       };
       
-      const showEmptyState = () => { listContainer.innerHTML = `<div class="empty-state"><p class="empty-state-text">Tidak Ada Hasil</p><p>Coba sesuaikan filter atau kata kunci pencarian Anda.</p></div>`; };
-      const showLoadingState = () => { listContainer.innerHTML = `<div class="loading"><div class="spinner"></div><p>Memuat data...</p></div>`; };
-
-      // --- Logika Data ---
       const filterData = () => {
         const query = searchInput.value.toLowerCase();
         const status = statusFilter.value;
@@ -377,7 +290,7 @@
       };
 
       const fetchSheet = async (sheetIndex = 0) => {
-        showLoadingState();
+        listContainer.innerHTML = `<div class="loading"><div class="spinner"></div><p>Memuat data...</p></div>`;
         const sheetNumber = parseInt(sheetIndex, 10) + 1;
         const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=Sheet${sheetNumber}`;
         try {
@@ -386,9 +299,8 @@
           const rows = text.trim().split('\n').map(r => r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(c => c.replace(/^"|"$/g, '').trim()));
           if(rows.length < 2){ allData = []; return; }
           const headers = rows.shift();
-          allData = rows.map(row => Object.fromEntries(row.map((val, i) => [headers[i], val])));
+          allData = rows.map(row => Object.fromEntries(row.map((val, i) => [headers[i] || `col_${i}`, val])));
         } catch (error) {
-          console.error('Gagal memuat data:', error);
           allData = [];
         } finally {
           currentPage = 1;
@@ -396,24 +308,20 @@
         }
       };
 
-      // --- Inisialisasi & Event Listeners ---
       const init = () => {
         const savedTheme = localStorage.getItem('theme');
         const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
         applyTheme(savedTheme || (prefersDark ? 'dark' : 'light'));
-
         searchInput.addEventListener('input', () => { currentPage = 1; renderList(); });
         statusFilter.addEventListener('change', () => { currentPage = 1; renderList(); });
         sheetFilter.addEventListener('change', (e) => fetchSheet(e.target.value));
-        prevPageBtn.addEventListener('click', () => { if (currentPage > 1) { currentPage--; renderList(); } });
-        nextPageBtn.addEventListener('click', () => { currentPage++; renderList(); });
-
+        prevPageBtn.addEventListener('click', () => { if (currentPage > 1) { currentPage--; renderList(); window.scrollTo(0,0); } });
+        nextPageBtn.addEventListener('click', () => { currentPage++; renderList(); window.scrollTo(0,0); });
         fetchSheet(sheetFilter.value);
       };
 
       init();
     })();
   </script>
-
 </body>
 </html>
