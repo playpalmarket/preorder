@@ -6,11 +6,12 @@
   <title>PlayPal Pre Order - Ultimate UI</title>
   <style>
     /*
-      README: Ultimate Final Version (Priority Sort)
+      README: Ultimate Final Version (Corrected Privacy)
       ----------------------------------------------------
-      - FITUR BARU: Data diurutkan secara otomatis berdasarkan prioritas
-        status: Progress -> Pending -> Success -> Lainnya.
-      - Semua perbaikan sebelumnya sudah termasuk.
+      - PERBAIKAN FINAL: JavaScript kini menyembunyikan kolom "No Telepon"
+        dan BUKAN "Tgl Order".
+      - Semua fitur lain (urutan prioritas, total data, animasi halus)
+        tetap ada. Ini adalah versi yang paling sempurna.
     */
     :root {
       /* ... (Variabel CSS tidak berubah) ... */
@@ -206,7 +207,10 @@
           const card = document.createElement('article');
           const estDelivery = item['Est. Pengiriman'] ? `${item['Est. Pengiriman']} 20:00 WIB` : 'Tanggal tidak tersedia';
           
-          const hiddenKeys = ['Nickname', 'Produk / Item', 'Status', 'Est. Pengiriman', 'Tgl Order', 'No Telepon', 'ID / Nick Gift'];
+          // --- PERBAIKAN FINAL DI SINI ---
+          // Kolom 'No Telepon' sekarang disembunyikan. 'Tgl Order' akan tampil.
+          const hiddenKeys = ['Nickname', 'Produk / Item', 'Status', 'Est. Pengiriman', 'No Telepon', 'ID / Nick Gift'];
+          
           const detailsHtml = Object.entries(item)
             .filter(([key, value]) => value && !hiddenKeys.includes(key))
             .map(([key, value]) => `
@@ -266,8 +270,6 @@
           if(rows.length < 2){ allData = []; return; }
           const headers = rows.shift();
           const rawData = rows.map(row => Object.fromEntries(row.map((val, i) => [headers[i] || `col_${i}`, val])));
-
-          // ULTIMATE FIX: Urutkan data berdasarkan prioritas status
           const statusOrder = { 'progress': 1, 'pending': 2, 'success': 3 };
           allData = rawData.sort((a, b) => {
               const statusA = (a.Status || '').toLowerCase();
@@ -276,7 +278,6 @@
               const orderB = statusOrder[statusB] || 4;
               return orderA - orderB;
           });
-
         } catch (error) {
           allData = [];
         } finally {
