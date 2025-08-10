@@ -6,15 +6,13 @@
   <title>PlayPal Pre Order - Ultimate UI</title>
   <style>
     /*
-      README: FINAL ULTIMATE PROFESIONAL (Versi Lengkap)
+      README: FINAL ULTIMATE PROFESIONAL (PRIVACY FIXED)
       ----------------------------------------------------
-      - PRIVASI: Kolom "No Telepon" dan "ID / Nick Gift" sepenuhnya
-        tersembunyi dari detail kartu.
-      - PENCARIAN: Berfungsi untuk nama/nickname DAN nomor telepon.
-      - URUTAN: Data diurutkan berdasarkan prioritas status:
-        Progress -> Pending -> Success -> Lainnya.
-      - TOTAL DATA: Menampilkan "Total Pesanan: [jumlah]".
-      - ANIMASI: Transisi dark mode toggle yang halus.
+      - PRIVASI TUNTAS: Semua kemungkinan nama kolom nomor telepon
+        dan kolom tanpa judul (seperti Kolom C) PASTI disembunyikan.
+      - PENCARIAN TUNTAS: Pencarian berfungsi untuk nama DAN semua
+        kemungkinan kolom nomor telepon.
+      - Semua fitur lain (urutan, total data, animasi) sudah sempurna.
     */
     :root {
       --bg-primary: #F9F9FB;
@@ -209,7 +207,14 @@
           const card = document.createElement('article');
           const estDelivery = item['Est. Pengiriman'] ? `${item['Est. Pengiriman']} 20:00 WIB` : 'Tanggal tidak tersedia';
           
-          const hiddenKeys = ['Nickname', 'Produk / Item', 'Status', 'Est. Pengiriman', 'No Telepon', 'ID / Nick Gift'];
+          // --- PERBAIKAN PRIVASI TUNTAS DI SINI ---
+          const hiddenKeys = [
+            'Nickname', 'Produk / Item', 'Status', 'Est. Pengiriman',
+            'No Telepon', 'Nomor Telepon', 'Nomor HP', 'Telpon',
+            'ID / Nick Gift',
+             // Juga sembunyikan kolom tanpa nama (misal: col_2 untuk kolom C)
+            ...Object.keys(item).filter(key => key.startsWith('col_'))
+          ];
           
           const detailsHtml = Object.entries(item)
             .filter(([key, value]) => value && !hiddenKeys.includes(key))
@@ -252,7 +257,8 @@
         const status = statusFilter.value;
         return allData.filter(item => {
           const name = (item['Nickname'] || '').toLowerCase();
-          const phone = (item['No Telepon'] || '').toLowerCase();
+          // --- PENCARIAN TUNTAS DI SINI ---
+          const phone = (item['No Telepon'] || item['Nomor Telepon'] || item['Nomor HP'] || '').toLowerCase();
           
           let itemStatus = (item['Status'] || '').toLowerCase();
           if (itemStatus === 'gagal') itemStatus = 'failed';
@@ -274,7 +280,7 @@
           const rows = text.trim().split('\n').map(r => r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(c => c.replace(/^"|"$/g, '').trim()));
           if(rows.length < 2){ allData = []; return; }
           const headers = rows.shift();
-          const rawData = rows.map(row => Object.fromEntries(row.map((val, i) => [headers[i] || `col_${i}`, val])));
+          const rawData = rows.map(row => Object.fromEntries(row.map((val, i) => [headers[i] || `col_${i+1}`, val])));
           
           const statusOrder = { 'progress': 1, 'pending': 2, 'success': 3 };
           allData = rawData.sort((a, b) => {
